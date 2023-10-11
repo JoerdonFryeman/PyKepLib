@@ -1,4 +1,5 @@
 from ctypes import *
+from random import choice
 from accessify import protected
 
 
@@ -213,12 +214,28 @@ class Enigma(PyKepLib):
             return "Ошибка кодирования!"
 
 
-class RandomDataList(PyKepLib):
-    def get_random_data(self):
-        pass
+class GetRandomData(PyKepLib):
+    transfer_list = []
 
-    def verify_data(self):
-        pass
+    def get_random_data(self, data_list):
+        """
+        Метод принимает список или кортеж объектов, с помощью цикла добавляет их в список transfer_list
+        класса GetRandomData и не повторяясь возвращает в случайном порядке.
+
+        :param data_list: list
+        :return: str
+        """
+        try:
+            data = choice(list(data_list) or tuple(data_list))
+            if data not in self.transfer_list:
+                self.transfer_list.append(data)
+                if len(self.transfer_list) == len(data_list):
+                    self.transfer_list.clear()
+                return data
+            else:
+                return ''
+        except ValueError:
+            pass
 
 
 class SymbolRemove(PyKepLib):
