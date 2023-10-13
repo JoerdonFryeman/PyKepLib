@@ -1,5 +1,7 @@
 from ctypes import *
 from random import choice
+from platform import system
+
 from accessify import protected
 
 
@@ -161,16 +163,37 @@ class PyKepLib:
         return [i for i in text]
 
 
+class System(PyKepLib):
+    @staticmethod
+    def get_system_command():
+        """
+        Метод возвращает команды для текущей ос
+        :return: str
+        """
+        system_name = system()
+        if system_name == 'Linux':
+            return 'clear'
+        elif system_name == 'Windows':
+            return 'cls'
+
+
 class Visual(PyKepLib):
     @staticmethod
     def get_loading_points(counter):
-        if counter == 1:
+        """
+        Метод принимает значение счётчика и возвращает при
+        различных его значениях разное колличество точек.
+
+        :param counter: int
+        :return: str
+        """
+        if int(counter) == 1:
             return ''
-        elif counter == 2:
+        elif int(counter) == 2:
             return '.'
-        elif counter == 3:
+        elif int(counter) == 3:
             return '..'
-        elif counter == 4:
+        elif int(counter) == 4:
             return '...'
 
 

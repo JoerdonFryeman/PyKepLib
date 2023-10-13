@@ -1,6 +1,8 @@
+import os
 from time import sleep
-from pykeplib import SymbolRemove, Enigma, GetRandomData, Visual
+from pykeplib import System, Enigma, Visual, SymbolRemove, GetRandomData
 
+sy = System()
 en = Enigma()
 vi = Visual()
 sr = SymbolRemove()
@@ -28,8 +30,9 @@ def get_loading_points_example():
         if counter == 4:
             counter = 0
         counter += 1
-        print(vi.get_loading_points(counter))
+        print(f'Загрузка{vi.get_loading_points(counter)}')
         sleep(0.3)
+        os.system(sy.get_system_command())  # пример использования метода get_system_command
 
 
 def remove_symbols_example():
