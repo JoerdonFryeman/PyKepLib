@@ -161,6 +161,19 @@ class PyKepLib:
         return [i for i in text]
 
 
+class Visual(PyKepLib):
+    @staticmethod
+    def get_loading_points(counter):
+        if counter == 1:
+            return ''
+        elif counter == 2:
+            return '.'
+        elif counter == 3:
+            return '..'
+        elif counter == 4:
+            return '...'
+
+
 class Enigma(PyKepLib):
     def coding(self, text):
         """
