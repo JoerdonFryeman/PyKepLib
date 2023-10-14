@@ -1,7 +1,6 @@
 from ctypes import *
 from random import choice
 from platform import system
-
 from accessify import protected
 
 
@@ -163,9 +162,14 @@ class PyKepLib:
         return [i for i in text]
 
 
+class TheCPower(CKepLib):
+    def exponentiation(self, value):
+        return self._get_cdll().main(value)
+
+
 class System(PyKepLib):
     @staticmethod
-    def get_system_command():
+    def get_system_command() -> str:
         """
         Метод возвращает команды для текущей ос
         :return: str
@@ -179,26 +183,27 @@ class System(PyKepLib):
 
 class Visual(PyKepLib):
     @staticmethod
-    def get_loading_points(counter):
+    def get_loading_points(download_text, counter) -> str:
         """
         Метод принимает значение счётчика и возвращает при
         различных его значениях разное колличество точек.
 
+        :param download_text: str
         :param counter: int
         :return: str
         """
         if int(counter) == 1:
-            return ''
+            return f'{download_text}'
         elif int(counter) == 2:
-            return '.'
+            return f'{download_text}.'
         elif int(counter) == 3:
-            return '..'
+            return f'{download_text}..'
         elif int(counter) == 4:
-            return '...'
+            return f'{download_text}...'
 
 
 class Enigma(PyKepLib):
-    def coding(self, text):
+    def coding(self, text) -> str:
         """
         Метод принимает строковую или числовую информацию и
         возвращает её в кодированном строковом виде.
@@ -220,7 +225,7 @@ class Enigma(PyKepLib):
         except KeyError:
             return "Ошибка кодирования!"
 
-    def decoding(self, code):
+    def decoding(self, code) -> str:
         """
         Метод принимает строковый или числовой код и
         возвращает информацию в декодированном строковом виде.
@@ -253,7 +258,7 @@ class Enigma(PyKepLib):
 class GetRandomData(PyKepLib):
     transfer_list = []
 
-    def get_random_data(self, data_list):
+    def get_random_data(self, data_list) -> str:
         """
         Метод принимает список или кортеж объектов, с помощью цикла добавляет их в список transfer_list
         класса GetRandomData и не повторяясь возвращает в случайном порядке.
