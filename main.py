@@ -9,18 +9,14 @@ sr = SymbolRemove()
 rd = GetRandomData()
 
 
-def ckeplib_example(var):
-    print(var.var().main(54))
-
-
 def coding_and_decoding_example():
     print(
-        f'Пример кодирования сообщения с помощью метода "coding": '
+        f'\nПример кодирования сообщения с помощью метода "coding": '
         f'{en.coding("Hello world!")}\n'
     )
     print(
-        f'\nПример декодирования сообщения с помощью метода "decoding": '
-        f'{en.decoding("222406695695474553948474635695399736")}'
+        f'Пример декодирования сообщения с помощью метода "decoding": '
+        f'{en.decoding("222406695695474553948474635695399736")}\n'
     )
 
 
@@ -40,7 +36,7 @@ def get_loading_points_example():
 def remove_symbols_example():
     print(
         sr.remove_symbols_return_word(
-            f"удалено_Пример_удалено", "_", 2
+            f"удалено_\nПример_удалено", "_", 2
         ), end=''
     )
     print(
