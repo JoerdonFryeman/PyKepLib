@@ -80,9 +80,9 @@ class Enigma(PyKepLib):
             transfer_second = []
 
             for i in self._split_text(str(text)):
-                transfer_first.append(self._get_coding_or_decoding_dict('dictionaries/coding_dict_first.spec')[i])
+                transfer_first.append(self._get_coding_or_decoding_dict('coding_decoding_dict.spec')[0][i])
             for i in self._split_text(''.join(transfer_first)):
-                transfer_second.append(self._get_coding_or_decoding_dict('dictionaries/coding_dict_second.spec')[i])
+                transfer_second.append(self._get_coding_or_decoding_dict('coding_decoding_dict.spec')[1][i])
 
             return ''.join(transfer_second)
 
@@ -109,9 +109,9 @@ class Enigma(PyKepLib):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
             for i in transfer_first:
-                transfer_second.append(self._get_coding_or_decoding_dict('dictionaries/decoding_dict_first.spec')[i])
+                transfer_second.append(self._get_coding_or_decoding_dict('coding_decoding_dict.spec')[2][i])
             for i in transfer_second:
-                transfer_third.append(self._get_coding_or_decoding_dict('dictionaries/decoding_dict_second.spec')[i])
+                transfer_third.append(self._get_coding_or_decoding_dict('coding_decoding_dict.spec')[3][i])
 
             return ''.join(transfer_third)
 
