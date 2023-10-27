@@ -1,25 +1,21 @@
 from ctypes import *
 from random import choice
 from platform import system
-from accessify import protected
 
 
 class CKepLib:
-    @protected
     @staticmethod
     def _get_cdll():
         return CDLL("./ckeplib.so")
 
 
 class PyKepLib:
-    @protected
     @staticmethod
     def _split_text(text):
         return [i for i in text]
 
-    @protected
     @staticmethod
-    def _get_coding_or_decoding_dict():
+    def __create_coding_or_decoding_dict():
         coding_or_decoding_dict = [
             {
                 'А': ' ', 'Б': '_', 'В': '/', 'Г': 't', 'Д': ')', 'Е': 'В', 'Ё': '{', 'Ж': '-', 'З': 'a', 'И': '!',
@@ -181,24 +177,22 @@ class PyKepLib:
         ]
         return coding_or_decoding_dict
 
+    @property
+    def get_coding_or_decoding_dict(self):
+        return self.__create_coding_or_decoding_dict
 
-class TheCPower(CKepLib):
-    def get_exponentiation(self, value):
-        return self._get_cdll().main(value)
-
-
-class System(PyKepLib):
     @staticmethod
     def get_system_command() -> str:
-        """
-        Метод возвращает команды для текущей ос
-        :return: str
-        """
         system_name = system()
         if system_name == 'Linux':
             return 'clear'
         elif system_name == 'Windows':
             return 'cls'
+
+
+class TheCPower(CKepLib):
+    def get_exponentiation(self, value):
+        return self._get_cdll().main(value)
 
 
 class Visual(PyKepLib):
@@ -212,13 +206,13 @@ class Visual(PyKepLib):
         :param counter: int
         :return: str
         """
-        if int(counter) == 1:
+        if int(counter) == 0:
             return f'{download_text}'
-        elif int(counter) == 2:
+        elif int(counter) == 1:
             return f'{download_text}.'
-        elif int(counter) == 3:
+        elif int(counter) == 2:
             return f'{download_text}..'
-        elif int(counter) == 4:
+        elif int(counter) == 3:
             return f'{download_text}...'
 
 
@@ -236,9 +230,9 @@ class Enigma(PyKepLib):
             transfer_second = []
 
             for i in self._split_text(str(text)):
-                transfer_first.append(self._get_coding_or_decoding_dict()[0][i])
+                transfer_first.append(self.get_coding_or_decoding_dict()[0][i])
             for i in self._split_text(''.join(transfer_first)):
-                transfer_second.append(self._get_coding_or_decoding_dict()[1][i])
+                transfer_second.append(self.get_coding_or_decoding_dict()[1][i])
 
             return ''.join(transfer_second)
 
@@ -265,9 +259,9 @@ class Enigma(PyKepLib):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
             for i in transfer_first:
-                transfer_second.append(self._get_coding_or_decoding_dict()[2][i])
+                transfer_second.append(self.get_coding_or_decoding_dict()[2][i])
             for i in transfer_second:
-                transfer_third.append(self._get_coding_or_decoding_dict()[3][i])
+                transfer_third.append(self.get_coding_or_decoding_dict()[3][i])
 
             return ''.join(transfer_third)
 
