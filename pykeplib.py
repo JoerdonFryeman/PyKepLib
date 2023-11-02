@@ -3,6 +3,17 @@ from random import choice
 from platform import system
 
 
+class Descriptor:
+    def __set_name__(self, owner, name) -> None:
+        self.name = f"_{name}"
+
+    def __get__(self, instance, owner) -> int:
+        return getattr(instance, self.name)
+
+    def __set__(self, instance, value):
+        setattr(instance, self.name, value)
+
+
 class CKepLib:
     @staticmethod
     def _get_cdll():
