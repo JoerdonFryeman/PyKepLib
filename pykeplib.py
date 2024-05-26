@@ -1,4 +1,3 @@
-import csv
 import json
 from ctypes import *
 from random import choice
@@ -52,13 +51,16 @@ class PyKepLib(Base):
         return [i for i in text]
 
     def __create_coding_or_decoding_dict(self):
-        coding_or_decoding_dict = [
-            self.get_json_data('coding_or_decoding_dict/coding_dict_zero'),
-            self.get_json_data('coding_or_decoding_dict/coding_dict_one'),
-            self.get_json_data('coding_or_decoding_dict/decoding_dict_two'),
-            self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
-        ]
-        return coding_or_decoding_dict
+        try:
+            coding_or_decoding_dict = [
+                self.get_json_data('coding_or_decoding_dict/coding_dict_zero'),
+                self.get_json_data('coding_or_decoding_dict/coding_dict_one'),
+                self.get_json_data('coding_or_decoding_dict/decoding_dict_two'),
+                self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
+            ]
+            return coding_or_decoding_dict
+        except FileNotFoundError:
+            raise FileNotFoundError('File not found!')
 
     @property
     def get_coding_or_decoding_dict(self):

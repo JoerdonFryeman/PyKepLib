@@ -27,7 +27,12 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         self.assertEqual(self._split_text('Python'), ['P', 'y', 't', 'h', 'o', 'n'])
 
     def test_get_coding_or_decoding_dict(self):
-        self.assertEqual(type(self.get_coding_or_decoding_dict()), list)
+        with self.assertRaises(FileNotFoundError) as ex:
+            self.get_json_data('coding_or_decoding_dict/coding_dict_zero')
+            self.get_json_data('coding_or_decoding_dict/coding_dict_one')
+            self.get_json_data('coding_or_decoding_dict/decoding_dict_two')
+            self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
+        self.assertEqual('File not found!', ex.exception.args[0])
 
     def test_get_system_command(self):
         self.assertEqual(self.get_system_command(), 'clear')  # 'cls' for windows

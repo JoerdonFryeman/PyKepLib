@@ -1,13 +1,11 @@
 import os
 from time import sleep
-from tests.tests import TestPyKepLib
 from pykeplib import Enigma, Visual, SymbolRemove, GetRandomData, TheCPower
 
 enigma = Enigma()
 visual = Visual()
 sr = SymbolRemove()
 rd = GetRandomData()
-test = TestPyKepLib()
 cp = TheCPower()
 
 
