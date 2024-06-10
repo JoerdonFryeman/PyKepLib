@@ -2,15 +2,14 @@ import json
 from ctypes import *
 from random import choice
 from platform import system
-from datetime import datetime
 from logging import config, getLogger
 
 
 class Descriptor:
-    def __set_name__(self, owner, name) -> None:
+    def __set_name__(self, owner, name):
         self.name = f"_{name}"
 
-    def __get__(self, instance, owner) -> int:
+    def __get__(self, instance, owner):
         return getattr(instance, self.name)
 
     def __set__(self, instance, value):
@@ -19,7 +18,7 @@ class Descriptor:
 
 class Base:
     @staticmethod
-    def get_json_data(name) -> dict:
+    def get_json_data(name: str) -> dict:
         try:
             with open(f'{name}.json') as file:
                 data = json.load(file)
@@ -41,11 +40,6 @@ class CKepLib(Base):
 
 
 class PyKepLib(Base):
-    @staticmethod
-    def get_date():
-        date = datetime.now().strftime('%d_%m_%Y')
-        return date
-
     @staticmethod
     def _split_text(text):
         return [i for i in text]
@@ -82,26 +76,26 @@ class TheCPower(CKepLib):
 
 class Visual(PyKepLib):
     @staticmethod
-    def get_loading_points(download_text, counter) -> str:
+    def get_loading_points(text: str, counter: int) -> str:
         """
-        Метод принимает значение счётчика и возвращает при
-        различных его значениях разное колличество точек.
+        The method takes the counter value as a dictionary key and
+        returns different number of points for different counter values.
 
-        :param download_text: str
+        :param text: str
         :param counter: int
         :return: str
         """
         dictionary = {
-            '0': lambda x: download_text,
-            '1': lambda x: download_text + '.',
-            '2': lambda x: download_text + '..',
-            '3': lambda x: download_text + '...',
-        }[str(counter)](download_text)
+            0: lambda x: f'{text}   ',
+            1: lambda x: f'{text}.  ',
+            2: lambda x: f'{text}.. ',
+            3: lambda x: f'{text}...',
+        }[counter](text)
         return dictionary
 
 
 class Enigma(PyKepLib):
-    def coding(self, text) -> str:
+    def coding(self, text: str | int | float) -> str:
         """
         Метод принимает строковую или числовую информацию и
         возвращает её в кодированном строковом виде.
@@ -123,7 +117,7 @@ class Enigma(PyKepLib):
         except KeyError:
             self.logger.error('Ошибка кодирования!')
 
-    def decoding(self, code) -> str:
+    def decoding(self, code: str | int | float) -> str:
         """
         Метод принимает строковый или числовой код и
         возвращает информацию в декодированном строковом виде.
@@ -156,7 +150,7 @@ class Enigma(PyKepLib):
 class GetRandomData(PyKepLib):
     transfer_list = []
 
-    def get_random_data(self, data_list) -> str:
+    def get_random_data(self, data_list: list | tuple | set) -> str:
         """
         Метод принимает список или кортеж объектов, с помощью цикла добавляет их в список transfer_list
         класса GetRandomData и не повторяясь возвращает в случайном порядке.
@@ -178,7 +172,7 @@ class GetRandomData(PyKepLib):
 
 
 class SymbolRemove(PyKepLib):
-    def remove_symbols_return_word(self, word_with_symbol, removed_symbol, word_number) -> str:
+    def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """
         Метод убирает из слова или предложения принимаемый в строковом виде символ и
         возвращает выбранное третьим параметром в виде числа слово.
@@ -193,7 +187,7 @@ class SymbolRemove(PyKepLib):
         except (TypeError, IndexError, ValueError):
             self.logger.error('Неверный ввод!')
 
-    def remove_symbols_from_sentence(self, suggestion, removed_symbol) -> str:
+    def remove_symbols_from_sentence(self, suggestion: str, removed_symbol: str) -> str:
         """
         Метод убирает из слова или предложения принимаемый в виде строки
         вторым параметром символ и возвращает это слово или предложение.

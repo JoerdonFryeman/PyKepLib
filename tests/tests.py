@@ -1,4 +1,3 @@
-from datetime import datetime
 from unittest import TestCase, main
 from pykeplib import TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
 
@@ -19,9 +18,6 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         with self.assertRaises(OSError) as ex:
             self._get_cdll()
         self.assertEqual('OS Error!', ex.exception.args[0])
-
-    def test_get_date(self):
-        self.assertEqual(self.get_date(), datetime.now().strftime('%d_%m_%Y'))
 
     def test__split_text(self):
         self.assertEqual(self._split_text('Python'), ['P', 'y', 't', 'h', 'o', 'n'])
