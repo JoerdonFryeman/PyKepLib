@@ -11,11 +11,11 @@ cp = TheCPower()
 
 def coding_and_decoding_example():
     enigma.logger.info(
-        f'Пример кодирования сообщения с помощью метода "coding": '
+        f'Example of encoding a message using the method "coding": '
         f'{enigma.coding("Hello world!")}'
     )
     enigma.logger.info(
-        f'Пример декодирования сообщения с помощью метода "decoding": '
+        f'Example of decoding a message using the method "decoding": '
         f'{enigma.decoding("222406695695474553948474635695399736")}'
     )
 
@@ -26,8 +26,8 @@ def get_loading_points_example():
         if counter == 4:
             counter = 0
         os.system(visual.get_system_command())
-        visual.logger.info('пример использования метода "get_system_command"')
-        visual.logger.info(visual.get_loading_points('Загрузка', counter))
+        visual.logger.info('example of the method usage "get_system_command"')
+        visual.logger.info(visual.get_loading_points('Loading', counter))
         counter += 1
         sleep(0.3)
 
@@ -35,12 +35,12 @@ def get_loading_points_example():
 def remove_symbols_example():
     sr.logger.info(
         sr.remove_symbols_return_word(
-            f"удалено_Пример_удалено", '_', 2
+            f"deleted_Example_deleted", '_', 2
         )
     )
     sr.logger.info(
         sr.remove_symbols_from_sentence(
-            f'функционала_методов_"remove_symbols_return_word"'
+            f'of_the_method_functional "remove_symbols_return_word"'
             f' и "remove_symbols_from_sentence"', '_'
         )
     )
@@ -51,7 +51,7 @@ def get_random_data_example():
         x = rd.get_random_data((0, '1', 2, '3', 4, '5', 'Ω', 'λ', 'π', 'Σ', 'ω'))
         if not x:
             continue
-        rd.logger.info(f'Пример работы функции "get_random_data": {x} | {rd.transfer_list}')
+        rd.logger.info(f'Example of the function "get_random_data": {x} | {rd.transfer_list}')
         sleep(0.3)
 
 

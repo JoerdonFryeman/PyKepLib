@@ -37,7 +37,7 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         self.assertEqual(self.get_exponentiation(5), 25)
 
     def test_get_loading_points(self):
-        self.assertEqual(self.get_loading_points('Загрузка', 3), 'Загрузка...')
+        self.assertEqual(self.get_loading_points('Loading', 3), 'Loading...')
 
     def test_coding(self):
         self.assertEqual(self.coding('Hello world!'), '222406695695474553948474635695399736')
@@ -51,15 +51,15 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
     def test_remove_symbols_return_word(self):
         self.assertEqual(
             self.remove_symbols_return_word(
-                'удалено_Пример_удалено', '_', 2
-            ), 'Пример'
+                'deleted_Example_deleted', '_', 2
+            ), 'Example'
         )
 
     def test_remove_symbols_from_sentence(self):
         self.assertEqual(
             self.remove_symbols_from_sentence(
-                'Функционала_методов_', '_'
-            ), 'Функционала методов '
+                'Functional_of_the_method', '_'
+            ), 'Functional of the method'
         )
 
 

@@ -97,8 +97,8 @@ class Visual(PyKepLib):
 class Enigma(PyKepLib):
     def coding(self, text: str | int | float) -> str:
         """
-        Метод принимает строковую или числовую информацию и
-        возвращает её в кодированном строковом виде.
+        The method accepts string or numeric information and
+        returns it in encoded string form.
 
         :param text: str or int
         :return: str
@@ -115,12 +115,12 @@ class Enigma(PyKepLib):
             return ''.join(transfer_second)
 
         except KeyError:
-            self.logger.error('Ошибка кодирования!')
+            self.logger.error('Encoding error!')
 
     def decoding(self, code: str | int | float) -> str:
         """
-        Метод принимает строковый или числовой код и
-        возвращает информацию в декодированном строковом виде.
+        The method accepts a string or numeric code and
+        returns information in decoded string form.
 
         :param code: str or int
         :return: str
@@ -144,7 +144,7 @@ class Enigma(PyKepLib):
             return ''.join(transfer_third)
 
         except KeyError:
-            self.logger.error('Ошибка кодирования!')
+            self.logger.error('Encoding error!')
 
 
 class GetRandomData(PyKepLib):
@@ -152,8 +152,8 @@ class GetRandomData(PyKepLib):
 
     def get_random_data(self, data_list: list | tuple | set) -> str:
         """
-        Метод принимает список или кортеж объектов, с помощью цикла добавляет их в список transfer_list
-        класса GetRandomData и не повторяясь возвращает в случайном порядке.
+        The method accepts a list or tuple of objects, adds them to the transfer_list
+        with the help of a loop of GetRandomData class and returns them in random order without repeating.
 
         :param data_list: list
         :return: str
@@ -174,8 +174,8 @@ class GetRandomData(PyKepLib):
 class SymbolRemove(PyKepLib):
     def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """
-        Метод убирает из слова или предложения принимаемый в строковом виде символ и
-        возвращает выбранное третьим параметром в виде числа слово.
+        The method removes from a word or sentence a character accepted in string form and
+        returns the word selected by the third parameter as a number.
 
         :param word_with_symbol: str
         :param removed_symbol: str
@@ -185,12 +185,17 @@ class SymbolRemove(PyKepLib):
         try:
             return (''.join(word_with_symbol)).split(removed_symbol)[word_number - 1]
         except (TypeError, IndexError, ValueError):
-            self.logger.error('Неверный ввод!')
+            self.logger.error('Invalid input!')
 
     def remove_symbols_from_sentence(self, suggestion: str, removed_symbol: str) -> str:
         """
-        Метод убирает из слова или предложения принимаемый в виде строки
-        вторым параметром символ и возвращает это слово или предложение.
+        The method removes a character from a word or sentence accepted as a string
+        second parameter and returns this word or sentence.
+
+        You can use regular expressions from the built-in library re for example:
+        re.sub(r'\bWord_first\b', 'Word_second', str)
+        re.findall(r'\d{4}', str)
+        re.split(r'\W+', str)
 
         :param suggestion: str
         :param removed_symbol: str
@@ -199,4 +204,4 @@ class SymbolRemove(PyKepLib):
         try:
             return ' '.join(suggestion.split(removed_symbol))
         except (TypeError, AttributeError, ValueError):
-            self.logger.error('Неверный ввод!')
+            self.logger.error('Invalid input!')
