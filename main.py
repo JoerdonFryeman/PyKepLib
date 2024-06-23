@@ -55,7 +55,13 @@ def get_random_data_example():
         sleep(0.3)
 
 
-def get_cubed(value):
+@cp.get_exponentiation_decorator
+def get_exponentiation_example(value):
+    print(value)
+
+
+@visual.loading_points_decorator
+def get_cubed_example(value):
     cubed = cp.get_exponentiation(value) * value
     print(cubed)
 

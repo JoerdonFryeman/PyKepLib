@@ -1,5 +1,7 @@
+import os
 import json
 from ctypes import *
+from time import sleep
 from random import choice
 from platform import system
 from logging import config, getLogger
@@ -73,6 +75,12 @@ class TheCPower(CKepLib):
     def get_exponentiation(self, value):
         return self._get_cdll().main(value)
 
+    def get_exponentiation_decorator(self, func):
+        def wrapper(*args):
+            return func(self._get_cdll().main(*args))
+
+        return wrapper
+
 
 class Visual(PyKepLib):
     @staticmethod
@@ -85,13 +93,35 @@ class Visual(PyKepLib):
         :param counter: int
         :return: str
         """
-        dictionary = {
-            0: lambda x: f'{text}   ',
-            1: lambda x: f'{text}.  ',
-            2: lambda x: f'{text}.. ',
-            3: lambda x: f'{text}...',
-        }[counter](text)
-        return dictionary
+        if int(counter) == 0:
+            return f'{text}'
+        elif int(counter) == 1:
+            return f'{text}.'
+        elif int(counter) == 2:
+            return f'{text}..'
+        elif int(counter) == 3:
+            return f'{text}...'
+
+    def loading_points_decorator(self, func, text='Loading'):
+        def wrapper(*args):
+            counter = 0
+            result = func(*args)
+            for i in range(4):
+                if counter == 4:
+                    counter = 0
+                dictionary = {
+                    0: lambda x: f'{text}   ',
+                    1: lambda x: f'{text}.  ',
+                    2: lambda x: f'{text}.. ',
+                    3: lambda x: f'{text}...',
+                }[counter](text)
+                os.system(self.get_system_command())
+                print(dictionary)
+                counter += 1
+                sleep(0.3)
+            return result
+
+        return wrapper
 
 
 class Enigma(PyKepLib):
@@ -192,15 +222,16 @@ class SymbolRemove(PyKepLib):
         The method removes a character from a word or sentence accepted as a string
         second parameter and returns this word or sentence.
 
-        You can use regular expressions from the built-in library re for example:
-        re.sub(r'\bWord_first\b', 'Word_second', str)
-        re.findall(r'\d{4}', str)
-        re.split(r'\W+', str)
-
         :param suggestion: str
         :param removed_symbol: str
         :return: str
         """
+
+        # You can use regular expressions from the built-in library re for example:
+        # re.sub(r'\bWord_first\b', 'Word_second', str)
+        # re.findall(r'\d{4}', str)
+        # re.split(r'\W+', str)
+
         try:
             return ' '.join(suggestion.split(removed_symbol))
         except (TypeError, AttributeError, ValueError):
