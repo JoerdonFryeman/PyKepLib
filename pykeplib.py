@@ -2,8 +2,8 @@ import os
 import json
 from ctypes import *
 from time import sleep
-from random import choice
 from platform import system
+from random import choice, randint
 from logging import config, getLogger
 
 
@@ -122,6 +122,29 @@ class Visual(PyKepLib):
             return result
 
         return wrapper
+
+    def wake_up_neo(self, sentences_list: list):
+        """
+        The function takes a list of words and return as a printed input
+
+        :param sentences_list: list
+        """
+        counter_first = 0
+        for s in sentences_list:
+            counter_first += 1
+            counter_second = 0
+            sentence = [i for i in str(s)]
+            for i in range(len(sentence)):
+                counter_second += 1
+                if counter_first == 1:
+                    sleep(float(f'0.{randint(1, 3)}'))
+                elif counter_first == 2:
+                    sleep(float(f'0.{randint(2, 4)}'))
+                elif counter_first == 3:
+                    sleep(float(f'0.{randint(1, 3)}'))
+                os.system(self.get_system_command())
+                print(''.join(sentence[0:counter_second]))
+            sleep(float(4))
 
 
 class Enigma(PyKepLib):

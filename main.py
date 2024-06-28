@@ -32,6 +32,24 @@ def get_loading_points_example():
         sleep(0.3)
 
 
+def get_wake_up_neo_text():
+    visual.wake_up_neo(['Wake up, Neo...', 'The Matrix has you...', 'Follow the white rabbit.'])
+    os.system(visual.get_system_command())
+    print('Knock, knock, Neo.')
+    sleep(4.2)
+    os.system(visual.get_system_command())
+
+    def get_user_text():
+        sentences_list = []
+        enter = True
+        while enter:
+            enter = input('Enter your sentence: ')
+            sentences_list.append(enter)
+        visual.wake_up_neo(sentences_list)
+
+    get_user_text()
+
+
 def remove_symbols_example():
     sr.logger.info(
         sr.remove_symbols_return_word(
