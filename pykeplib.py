@@ -142,6 +142,8 @@ class Visual(PyKepLib):
                     sleep(float(f'0.{randint(2, 4)}'))
                 elif counter_first == 3:
                     sleep(float(f'0.{randint(1, 3)}'))
+                else:
+                    sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
                 os.system(self.get_system_command())
                 print(''.join(sentence[0:counter_second]))
             sleep(float(4))
