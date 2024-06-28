@@ -130,10 +130,10 @@ class Visual(PyKepLib):
         :param sentences_list: list
         """
         counter_first = 0
-        for s in sentences_list:
+        for text in sentences_list:
             counter_first += 1
             counter_second = 0
-            sentence = [i for i in str(s)]
+            sentence = self._split_text(str(text))
             for i in range(len(sentence)):
                 counter_second += 1
                 if counter_first == 1:
