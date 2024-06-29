@@ -19,9 +19,6 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
             self._get_cdll()
         self.assertEqual('OS Error!', ex.exception.args[0])
 
-    def test__split_text(self):
-        self.assertEqual(self._split_text('Python'), ['P', 'y', 't', 'h', 'o', 'n'])
-
     def test_get_coding_or_decoding_dict(self):
         with self.assertRaises(FileNotFoundError) as ex:
             self.get_json_data('coding_or_decoding_dict/coding_dict_zero')

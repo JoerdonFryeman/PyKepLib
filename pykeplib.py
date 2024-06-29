@@ -42,10 +42,6 @@ class CKepLib(Base):
 
 
 class PyKepLib(Base):
-    @staticmethod
-    def _split_text(text):
-        return [i for i in text]
-
     def __create_coding_or_decoding_dict(self):
         try:
             coding_or_decoding_dict = [
@@ -133,7 +129,7 @@ class Visual(PyKepLib):
         for text in sentences_list:
             counter_first += 1
             counter_second = 0
-            sentence = self._split_text(str(text))
+            sentence = [i for i in text]
             for i in range(len(sentence)):
                 counter_second += 1
                 if counter_first == 1:
@@ -161,14 +157,11 @@ class Enigma(PyKepLib):
         try:
             transfer_first = []
             transfer_second = []
-
-            for i in self._split_text(str(text)):
+            for i in [i for i in text]:
                 transfer_first.append(self.get_coding_or_decoding_dict()[0][i])
-            for i in self._split_text(''.join(transfer_first)):
+            for i in [i for i in ''.join(transfer_first)]:
                 transfer_second.append(self.get_coding_or_decoding_dict()[1][i])
-
             return ''.join(transfer_second)
-
         except KeyError:
             self.logger.error('Encoding error!')
 
@@ -183,11 +176,9 @@ class Enigma(PyKepLib):
         try:
             iteration_value = len(str(code))
             counter = 0
-
             transfer_first = []
             transfer_second = []
             transfer_third = []
-
             for i in range(iteration_value // 3):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
@@ -195,9 +186,7 @@ class Enigma(PyKepLib):
                 transfer_second.append(self.get_coding_or_decoding_dict()[2][i])
             for i in transfer_second:
                 transfer_third.append(self.get_coding_or_decoding_dict()[3][i])
-
             return ''.join(transfer_third)
-
         except KeyError:
             self.logger.error('Encoding error!')
 
@@ -227,6 +216,11 @@ class GetRandomData(PyKepLib):
 
 
 class SymbolRemove(PyKepLib):
+    # You can use regular expressions from the built-in library re for example:
+    # re.sub(r'\bWord_first\b', 'Word_second', str)
+    # re.findall(r'\d{4}', str)
+    # re.split(r'\W+', str)
+
     def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """
         The method removes from a word or sentence a character accepted in string form and
@@ -251,12 +245,6 @@ class SymbolRemove(PyKepLib):
         :param removed_symbol: str
         :return: str
         """
-
-        # You can use regular expressions from the built-in library re for example:
-        # re.sub(r'\bWord_first\b', 'Word_second', str)
-        # re.findall(r'\d{4}', str)
-        # re.split(r'\W+', str)
-
         try:
             return ' '.join(suggestion.split(removed_symbol))
         except (TypeError, AttributeError, ValueError):
