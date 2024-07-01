@@ -2,6 +2,9 @@ import os
 from time import sleep
 from pykeplib import Enigma, Visual, SymbolRemove, GetRandomData, TheCPower
 
+
+# reset to save 21
+
 enigma = Enigma()
 visual = Visual()
 sr = SymbolRemove()

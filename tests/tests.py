@@ -2,6 +2,8 @@ from unittest import TestCase, main
 from pykeplib import TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
 
 
+# reset to save 21
+
 class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove):
 
     def test_get_json_logging(self):

@@ -7,6 +7,8 @@ from random import choice, randint
 from logging import config, getLogger
 
 
+# reset to save 21
+
 class Descriptor:
     def __set_name__(self, owner, name):
         self.name = f"_{name}"
