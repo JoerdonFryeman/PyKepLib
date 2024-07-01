@@ -2,8 +2,6 @@ from unittest import TestCase, main
 from pykeplib import TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
 
 
-# reset to save 21
-
 class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove):
 
     def test_get_json_logging(self):
@@ -37,6 +35,9 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
 
     def test_get_loading_points(self):
         self.assertEqual(self.get_loading_points('Loading', 3), 'Loading...')
+
+    def test_wake_up_neo(self):
+        self.assertEqual(self.wake_up_neo(['Wake up, Neo...', ]), None)
 
     def test_coding(self):
         self.assertEqual(self.coding('Hello world!'), '222406695695474553948474635695399736')
