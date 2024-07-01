@@ -1,5 +1,6 @@
 import os
 import json
+import curses
 from ctypes import *
 from time import sleep
 from platform import system
@@ -121,12 +122,16 @@ class Visual(PyKepLib):
 
         return wrapper
 
-    def wake_up_neo(self, sentences_list: list):
+    @staticmethod
+    def wake_up_neo(stdscr, sentences_list: list):
         """
         The function takes a list of words and return as a printed input
 
-        :param sentences_list: list
+        :param stdscr: initscr
+        :param sentences_list:
         """
+        curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        GREEN_ON_BLACK = curses.color_pair(1)
         counter_first = 0
         for text in sentences_list:
             counter_first += 1
@@ -142,8 +147,9 @@ class Visual(PyKepLib):
                     sleep(float(f'0.{randint(1, 3)}'))
                 else:
                     sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
-                os.system(self.get_system_command())
-                print(''.join(sentence[0:counter_second]))
+                stdscr.clear()
+                stdscr.addstr(2, 3, ''.join(sentence[0:counter_second]), GREEN_ON_BLACK)
+                stdscr.refresh()
             sleep(float(4))
 
 

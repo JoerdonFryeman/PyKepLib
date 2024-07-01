@@ -1,4 +1,5 @@
 import os
+import curses
 from time import sleep
 from pykeplib import Enigma, Visual, SymbolRemove, GetRandomData, TheCPower
 
@@ -36,11 +37,18 @@ def get_loading_points_example():
 
 
 def get_wake_up_neo_text():
-    visual.wake_up_neo(['Wake up, Neo...', 'The Matrix has you...', 'Follow the white rabbit.'])
-    os.system(visual.get_system_command())
-    print('Knock, knock, Neo.')
-    sleep(4.2)
-    os.system(visual.get_system_command())
+    curses.wrapper(visual.wake_up_neo, ['Wake up, Neo...', 'The Matrix has you...', 'Follow the white rabbit.'])
+
+    def get_extra_text(stdscr):
+        curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        GREEN_ON_BLACK = curses.color_pair(1)
+        stdscr.clear()
+        stdscr.addstr(2, 3, 'Knock, knock, Neo.', GREEN_ON_BLACK)
+        stdscr.refresh()
+        sleep(4.2)
+        stdscr.clear()
+
+    curses.wrapper(get_extra_text)
 
     def get_user_text():
         sentences_list = []
@@ -48,7 +56,8 @@ def get_wake_up_neo_text():
         while enter:
             enter = input('Enter your sentence: ')
             sentences_list.append(enter)
-        visual.wake_up_neo(sentences_list)
+        curses.wrapper(visual.wake_up_neo, sentences_list)
+        os.system(visual.get_system_command())
 
     get_user_text()
 
