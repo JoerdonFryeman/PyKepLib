@@ -84,6 +84,11 @@ def get_cubed_example(value):
     print(cubed)
 
 
+def manipulate_with_script_in_file():
+    visual.make_script_hidden_in_file('example', 'png', 'example', 'exe')
+    visual.get_script_hidden_in_file('example', 'png', 'example', 'exe')
+
+
 def get_welcome_script():
     print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/kepler54\n")
 

@@ -66,6 +66,57 @@ class PyKepLib(Base):
         elif system_name == 'Windows':
             return 'cls'
 
+    def make_script_hidden_in_file(self, file_name: str, file_format: str, script_name: str, script_format: str):
+        """
+        The function makes the script hidden in the file
+
+        :param file_name: str
+        :param file_format: str
+        :param script_name: str
+        :param script_format: str
+        """
+        try:
+            with (
+                open(f'{file_name}.{file_format}', 'rb') as file,
+                open(f'{file_name}_copy.{file_format}', 'wb') as file_copy
+            ):
+                file_copy.write(file.read())
+            self.logger.info(f'The {file_name}.{file_format} file was copied!')
+            with (
+                open(f'{file_name}_copy.{file_format}', 'ab') as file_for_script,
+                open(f'{script_name}.{script_format}', 'rb') as file_with_script
+            ):
+                file_for_script.write(file_with_script.read())
+            self.logger.info(
+                f'To the {file_name}_copy.{file_format} file was a hidden script '
+                f'{script_name}.{script_format} written!'
+            )
+        except FileNotFoundError:
+            self.logger.error('File not found!')
+
+    def get_script_hidden_in_file(self, file_name: str, file_format: str, script_name: str, script_format: str):
+        """
+        The function pulls a hidden script from a file
+
+        :param file_name: str
+        :param file_format: str
+        :param script_name: str
+        :param script_format: str
+        """
+        try:
+            with open(f'{file_name}_copy.{file_format}', 'rb') as file:
+                content = file.read()
+                offset = content.index(bytes.fromhex('FF D9'))
+                file.seek(offset + 2)
+                with open(f'{script_name}_copy.{script_format}', 'wb') as new_file:
+                    new_file.write(file.read())
+            self.logger.info(
+                f'From the {file_name}_copy.{file_format} file was a hidden script '
+                f'{script_name}_copy.{script_format} pulled out!'
+            )
+        except FileNotFoundError:
+            self.logger.error('File not found!')
+
 
 class TheCPower(CKepLib):
     def get_exponentiation(self, value):
