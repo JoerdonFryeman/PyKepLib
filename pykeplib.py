@@ -66,7 +66,9 @@ class PyKepLib(Base):
         elif system_name == 'Windows':
             return 'cls'
 
-    def make_script_hidden_in_file(self, file_name: str, file_format: str, script_name: str, script_format: str):
+    def make_script_hidden_in_file(
+            self, file_name: str, file_format: str, script_name: str, script_format: str
+    ):
         """
         The function makes the script hidden in the file
 
@@ -94,7 +96,9 @@ class PyKepLib(Base):
         except FileNotFoundError:
             self.logger.error('File not found!')
 
-    def get_script_hidden_in_file(self, file_name: str, file_format: str, script_name: str, script_format: str):
+    def get_script_hidden_in_file(
+            self, file_name: str, file_format: str, script_name: str, script_format: str, file_bytes: str
+    ):
         """
         The function pulls a hidden script from a file
 
@@ -102,17 +106,18 @@ class PyKepLib(Base):
         :param file_format: str
         :param script_name: str
         :param script_format: str
+        :param file_bytes: str
         """
         try:
-            with open(f'{file_name}_copy.{file_format}', 'rb') as file:
+            with open(f'{file_name}.{file_format}', 'rb') as file:
                 content = file.read()
-                offset = content.index(bytes.fromhex('FF D9'))
+                offset = content.index(bytes.fromhex(file_bytes))
                 file.seek(offset + 2)
-                with open(f'{script_name}_copy.{script_format}', 'wb') as new_file:
+                with open(f'{script_name}.{script_format}', 'wb') as new_file:
                     new_file.write(file.read())
             self.logger.info(
-                f'From the {file_name}_copy.{file_format} file was a hidden script '
-                f'{script_name}_copy.{script_format} pulled out!'
+                f'From the {file_name}.{file_format} file was a hidden script '
+                f'{script_name}.{script_format} pulled out!'
             )
         except FileNotFoundError:
             self.logger.error('File not found!')

@@ -86,7 +86,7 @@ def get_cubed_example(value):
 
 def manipulate_with_script_in_file():
     visual.make_script_hidden_in_file('example', 'png', 'example', 'exe')
-    visual.get_script_hidden_in_file('example', 'png', 'example', 'exe')
+    visual.get_script_hidden_in_file('example_copy', 'png', 'example_copy', 'exe', 'FF D9')
 
 
 def get_welcome_script():
