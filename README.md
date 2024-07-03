@@ -20,3 +20,12 @@ def main():
 Script path: /PyKepLib/tests/tests.py
 
 Working directory: /PyKepLib
+
+## My list of interesting libraries
+
+1. customtkinter — is a python desktop UI-library based on Tkinter, which provides modern looking and fully customizable widgets.
+2. moviepy — is a Python library for video editing: cutting, concatenations, title insertions, video compositing, video processing, and creation of custom effects.
+3. mutagen — is a Python module to handle audio metadata.
+4. rembg — is a tool to remove images background.
+5. pytesseract — is an optical character recognition (OCR) tool for python.
+6. easyocr — ready-to-use OCR with 80+ supported languages and all popular writing scripts including: Latin, Chinese, Arabic, Devanagari, Cyrillic, etc.

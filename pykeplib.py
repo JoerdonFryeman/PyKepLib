@@ -111,7 +111,7 @@ class PyKepLib(Base):
         try:
             with open(f'{file_name}.{file_format}', 'rb') as file:
                 content = file.read()
-                offset = content.index(bytes.fromhex(file_bytes))
+                offset = content.index(bytes.fromhex(file_bytes))  # 'FF D9'
                 file.seek(offset + 2)
                 with open(f'{script_name}.{script_format}', 'wb') as new_file:
                     new_file.write(file.read())
@@ -121,6 +121,8 @@ class PyKepLib(Base):
             )
         except FileNotFoundError:
             self.logger.error('File not found!')
+        except ValueError:
+            self.logger.error('Subsection not found!')
 
 
 class TheCPower(CKepLib):
