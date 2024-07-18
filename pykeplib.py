@@ -1,6 +1,6 @@
 import os
-import json
 from ctypes import *
+from json import load
 from time import sleep
 from platform import system
 from random import choice, randint
@@ -23,7 +23,7 @@ class Base:
     def get_json_data(name: str) -> dict:
         try:
             with open(f'{name}.json') as file:
-                data = json.load(file)
+                data = load(file)
             return data
         except FileNotFoundError:
             raise FileNotFoundError('File not found!')
@@ -71,7 +71,6 @@ class PyKepLib(Base):
     ):
         """
         The function makes the script hidden in the file
-
         :param file_name: str
         :param file_format: str
         :param script_name: str
@@ -101,7 +100,6 @@ class PyKepLib(Base):
     ):
         """
         The function pulls a hidden script from a file
-
         :param file_name: str
         :param file_format: str
         :param script_name: str
@@ -142,19 +140,17 @@ class Visual(PyKepLib):
         """
         The method takes the counter value as a dictionary key and
         returns different number of points for different counter values.
-
         :param text: str
         :param counter: int
         :return: str
         """
-        if int(counter) == 0:
-            return f'{text}'
-        elif int(counter) == 1:
-            return f'{text}.'
-        elif int(counter) == 2:
-            return f'{text}..'
-        elif int(counter) == 3:
-            return f'{text}...'
+        dictionary = {
+            0: lambda x: f'{text}   ',
+            1: lambda x: f'{text}.  ',
+            2: lambda x: f'{text}.. ',
+            3: lambda x: f'{text}...',
+        }[counter]
+        return dictionary(text)
 
     def loading_points_decorator(self, func, text='Loading'):
         def wrapper(*args):
@@ -180,26 +176,25 @@ class Visual(PyKepLib):
     def wake_up_neo(self, sentences_list: list):
         """
         The function takes a list of words and return as a printed input
-
         :param sentences_list: list
         """
-        counter_first = 0
+        _counter_first = 0
         for text in sentences_list:
-            counter_first += 1
-            counter_second = 0
+            _counter_first += 1
+            _counter_second = 0
             sentence = [i for i in text]
             for i in range(len(sentence)):
-                counter_second += 1
-                if counter_first == 1:
+                _counter_second += 1
+                if _counter_first == 1:
                     sleep(float(f'0.{randint(1, 3)}'))
-                elif counter_first == 2:
+                elif _counter_first == 2:
                     sleep(float(f'0.{randint(2, 4)}'))
-                elif counter_first == 3:
+                elif _counter_first == 3:
                     sleep(float(f'0.{randint(1, 3)}'))
                 else:
                     sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
                 os.system(self.get_system_command())
-                print(''.join(sentence[0:counter_second]))
+                print(''.join(sentence[0:_counter_second]))
             sleep(float(4))
 
 
@@ -208,7 +203,6 @@ class Enigma(PyKepLib):
         """
         The method accepts string or numeric information and
         returns it in encoded string form.
-
         :param text: str or int
         :return: str
         """
@@ -227,7 +221,6 @@ class Enigma(PyKepLib):
         """
         The method accepts a string or numeric code and
         returns information in decoded string form.
-
         :param code: str or int
         :return: str
         """
@@ -256,7 +249,6 @@ class GetRandomData(PyKepLib):
         """
         The method accepts a list or tuple of objects, adds them to the transfer_list
         with the help of a loop of GetRandomData class and returns them in random order without repeating.
-
         :param data_list: list
         :return: str
         """
@@ -283,7 +275,6 @@ class SymbolRemove(PyKepLib):
         """
         The method removes from a word or sentence a character accepted in string form and
         returns the word selected by the third parameter as a number.
-
         :param word_with_symbol: str
         :param removed_symbol: str
         :param word_number: int
@@ -298,7 +289,6 @@ class SymbolRemove(PyKepLib):
         """
         The method removes a character from a word or sentence accepted as a string
         second parameter and returns this word or sentence.
-
         :param suggestion: str
         :param removed_symbol: str
         :return: str
