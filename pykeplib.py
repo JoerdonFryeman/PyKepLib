@@ -44,12 +44,12 @@ class CKepLib(Base):
 class PyKepLib(Base):
     def __create_coding_or_decoding_dict(self):
         try:
-            coding_or_decoding_dict = [
+            coding_or_decoding_dict = (
                 self.get_json_data('coding_or_decoding_dict/coding_dict_zero'),
                 self.get_json_data('coding_or_decoding_dict/coding_dict_one'),
                 self.get_json_data('coding_or_decoding_dict/decoding_dict_two'),
                 self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
-            ]
+            )
             return coding_or_decoding_dict
         except FileNotFoundError:
             raise FileNotFoundError('File not found!')
@@ -60,62 +60,54 @@ class PyKepLib(Base):
 
     @staticmethod
     def get_system_command() -> str:
-        system_name = system()
-        if system_name == 'Linux':
-            return 'clear'
-        elif system_name == 'Windows':
-            return 'cls'
+        return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
 
-    def make_script_hidden_in_file(
-            self, file_name: str, file_format: str, script_name: str, script_format: str
-    ):
+    def make_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str):
         """
         The function makes the script hidden in the file
-        :param file_name: str
-        :param file_format: str
-        :param script_name: str
-        :param script_format: str
+        :param f_name: str
+        :param f_format: str
+        :param s_name: str
+        :param s_format: str
         """
         try:
             with (
-                open(f'{file_name}.{file_format}', 'rb') as file,
-                open(f'{file_name}_copy.{file_format}', 'wb') as file_copy
+                open(f'{f_name}.{f_format}', 'rb') as file,
+                open(f'{f_name}_copy.{f_format}', 'wb') as file_copy
             ):
                 file_copy.write(file.read())
-            self.logger.info(f'The {file_name}.{file_format} file was copied!')
+            self.logger.info(f'The {f_name}.{f_format} file was copied!')
             with (
-                open(f'{file_name}_copy.{file_format}', 'ab') as file_for_script,
-                open(f'{script_name}.{script_format}', 'rb') as file_with_script
+                open(f'{f_name}_copy.{f_format}', 'ab') as file_for_script,
+                open(f'{s_name}.{s_format}', 'rb') as file_with_script
             ):
                 file_for_script.write(file_with_script.read())
             self.logger.info(
-                f'To the {file_name}_copy.{file_format} file was a hidden script '
-                f'{script_name}.{script_format} written!'
+                f'To the {f_name}_copy.{f_format} file was a hidden script '
+                f'{s_name}.{s_format} written!'
             )
         except FileNotFoundError:
             self.logger.error('File not found!')
 
-    def get_script_hidden_in_file(
-            self, file_name: str, file_format: str, script_name: str, script_format: str, file_bytes: str
-    ):
+    def get_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str, f_bytes: str):
         """
         The function pulls a hidden script from a file
-        :param file_name: str
-        :param file_format: str
-        :param script_name: str
-        :param script_format: str
-        :param file_bytes: str
+        :param f_name: str
+        :param f_format: str
+        :param s_name: str
+        :param s_format: str
+        :param f_bytes: str
         """
         try:
-            with open(f'{file_name}.{file_format}', 'rb') as file:
+            with open(f'{f_name}.{f_format}', 'rb') as file:
                 content = file.read()
-                offset = content.index(bytes.fromhex(file_bytes))  # 'FF D9'
+                offset = content.index(bytes.fromhex(f_bytes))  # 'FF D9'
                 file.seek(offset + 2)
-                with open(f'{script_name}.{script_format}', 'wb') as new_file:
+                with open(f'{s_name}.{s_format}', 'wb') as new_file:
                     new_file.write(file.read())
             self.logger.info(
-                f'From the {file_name}.{file_format} file was a hidden script '
-                f'{script_name}.{script_format} pulled out!'
+                f'From the {f_name}.{f_format} file was a hidden script '
+                f'{s_name}.{s_format} pulled out!'
             )
         except FileNotFoundError:
             self.logger.error('File not found!')
@@ -144,26 +136,20 @@ class Visual(PyKepLib):
         :param counter: int
         :return: str
         """
-        dictionary = {
-            0: lambda x: f'{text}   ',
-            1: lambda x: f'{text}.  ',
-            2: lambda x: f'{text}.. ',
-            3: lambda x: f'{text}...',
-        }[counter]
-        return dictionary(text)
+        return {
+            0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
+            2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
+        }[counter](text)
 
     def loading_points_decorator(self, func, text='Loading'):
         def wrapper(*args):
-            counter = 0
-            result = func(*args)
+            counter, result = 0, func(*args)
             for i in range(4):
                 if counter == 4:
                     counter = 0
                 dictionary = {
-                    0: lambda x: f'{text}   ',
-                    1: lambda x: f'{text}.  ',
-                    2: lambda x: f'{text}.. ',
-                    3: lambda x: f'{text}...',
+                    0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
+                    2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
                 }[counter](text)
                 os.system(self.get_system_command())
                 print(dictionary)
@@ -207,8 +193,7 @@ class Enigma(PyKepLib):
         :return: str
         """
         try:
-            transfer_first = []
-            transfer_second = []
+            transfer_first, transfer_second = [], []
             for i in [i for i in text]:
                 transfer_first.append(self.get_coding_or_decoding_dict()[0][i])
             for i in [i for i in ''.join(transfer_first)]:
@@ -227,9 +212,7 @@ class Enigma(PyKepLib):
         try:
             iteration_value = len(str(code))
             counter = 0
-            transfer_first = []
-            transfer_second = []
-            transfer_third = []
+            transfer_first, transfer_second, transfer_third = [], [], []
             for i in range(iteration_value // 3):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
@@ -266,10 +249,12 @@ class GetRandomData(PyKepLib):
 
 
 class SymbolRemove(PyKepLib):
-    # You can use regular expressions from the built-in library re for example:
-    # re.sub(r'\bWord_first\b', 'Word_second', str)
-    # re.findall(r'\d{4}', str)
-    # re.split(r'\W+', str)
+    """
+    You can use regular expressions from the built-in library re for example:
+    re.sub(r'\bWord_first\b', 'Word_second', str)
+    re.findall(r'\d{4}', str)
+    re.split(r'\W+', str)
+    """
 
     def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """

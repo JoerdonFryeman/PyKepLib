@@ -1,9 +1,8 @@
 # PyKepLib
-Kepler's personal library
+My personal library
 More info you can find on https://github.com/kepler54
 ## Quickstart
 Call the example function on the main function
-For example:
 ``` code
 def main():
     get_random_data_example()
@@ -18,6 +17,7 @@ Working directory: /PyKepLib
 4. rembg — is a tool to remove images background.
 5. pytesseract — is an optical character recognition (OCR) tool for python.
 6. easyocr — ready-to-use OCR with 80+ supported languages and all popular writing scripts including: Latin, Chinese, Arabic, Devanagari, Cyrillic, etc.
-7. curses — terminal handling for character-cell displays
+7. curses — terminal handling for character-cell displays.
+8. pyscreenshot — screenshot library, replacement for the Pillow ImageGrab module on Linux.
 ## Support with Bitcoin
 bc1qewfgtrrg2gqgtvzl5d2pr9pte685pp5n3g6scy

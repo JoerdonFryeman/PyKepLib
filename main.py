@@ -32,6 +32,11 @@ def get_loading_points_example():
         sleep(0.3)
 
 
+@visual.loading_points_decorator
+def get_loading_points_example_decorator():
+    pass
+
+
 def get_wake_up_neo_text():
     visual.wake_up_neo(['Wake up, Neo...', 'The Matrix has you...', 'Follow the white rabbit.'])
     os.system(visual.get_system_command())
@@ -40,8 +45,7 @@ def get_wake_up_neo_text():
     os.system(visual.get_system_command())
 
     def get_user_text():
-        sentences_list = []
-        enter = True
+        sentences_list, enter = [], True
         while enter:
             enter = input('Enter your sentence: ')
             sentences_list.append(enter)
@@ -74,12 +78,11 @@ def get_random_data_example():
 
 
 @cp.get_exponentiation_decorator
-def get_exponentiation_example(value):
+def get_exponentiation_example(value: int):
     print(value)
 
 
-@visual.loading_points_decorator
-def get_cubed_example(value):
+def get_cubed_example(value: int):
     cubed = cp.get_exponentiation(value) * value
     print(cubed)
 
