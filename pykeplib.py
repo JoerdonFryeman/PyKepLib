@@ -65,10 +65,10 @@ class PyKepLib(Base):
     def make_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str):
         """
         The function makes the script hidden in the file
-        :param f_name: str
-        :param f_format: str
-        :param s_name: str
-        :param s_format: str
+        :param f_name: name of the file
+        :param f_format: files format
+        :param s_name: name of the script
+        :param s_format: scripts format
         """
         try:
             with (
@@ -92,11 +92,11 @@ class PyKepLib(Base):
     def get_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str, f_bytes: str):
         """
         The function pulls a hidden script from a file
-        :param f_name: str
-        :param f_format: str
-        :param s_name: str
-        :param s_format: str
-        :param f_bytes: str
+        :param f_name: name of the file
+        :param f_format: files format
+        :param s_name: name of the script
+        :param s_format: scripts format
+        :param f_bytes: name of the bytes
         """
         try:
             with open(f'{f_name}.{f_format}', 'rb') as file:
@@ -132,9 +132,9 @@ class Visual(PyKepLib):
         """
         The method takes the counter value as a dictionary key and
         returns different number of points for different counter values.
-        :param text: str
-        :param counter: int
-        :return: str
+        :param text: user text
+        :param counter: counter of the points
+        :return: text with the points
         """
         return {
             0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
@@ -162,7 +162,7 @@ class Visual(PyKepLib):
     def wake_up_neo(self, sentences_list: list):
         """
         The function takes a list of words and return as a printed input
-        :param sentences_list: list
+        :param sentences_list: list of user sentences
         """
         _counter_first = 0
         for text in sentences_list:
@@ -189,8 +189,8 @@ class Enigma(PyKepLib):
         """
         The method accepts string or numeric information and
         returns it in encoded string form.
-        :param text: str or int
-        :return: str
+        :param text: user text or numbers or symbols
+        :return: encoded string
         """
         try:
             transfer_first, transfer_second = [], []
@@ -206,8 +206,8 @@ class Enigma(PyKepLib):
         """
         The method accepts a string or numeric code and
         returns information in decoded string form.
-        :param code: str or int
-        :return: str
+        :param code: encoded string
+        :return: decoded string of text, numbers or symbols
         """
         try:
             iteration_value = len(str(code))
@@ -232,8 +232,8 @@ class GetRandomData(PyKepLib):
         """
         The method accepts a list or tuple of objects, adds them to the transfer_list
         with the help of a loop of GetRandomData class and returns them in random order without repeating.
-        :param data_list: list
-        :return: str
+        :param data_list: list of user data
+        :return: random data without repeating
         """
         try:
             data = choice(list(data_list) or tuple(data_list))
@@ -249,21 +249,19 @@ class GetRandomData(PyKepLib):
 
 
 class SymbolRemove(PyKepLib):
-    """
-    You can use regular expressions from the built-in library re for example:
-    re.sub(r'\bWord_first\b', 'Word_second', str)
-    re.findall(r'\d{4}', str)
-    re.split(r'\W+', str)
-    """
+    # You can use regular expressions from the built-in library re for example:
+    # re.sub(r'\bWord_first\b', 'Word_second', str)
+    # re.findall(r'\d{4}', str)
+    # re.split(r'\W+', str)
 
     def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """
         The method removes from a word or sentence a character accepted in string form and
         returns the word selected by the third parameter as a number.
-        :param word_with_symbol: str
-        :param removed_symbol: str
-        :param word_number: int
-        :return: str
+        :param word_with_symbol: user word or sentence
+        :param removed_symbol: symbol must be removed
+        :param word_number: number of the word position
+        :return: word
         """
         try:
             return (''.join(word_with_symbol)).split(removed_symbol)[word_number - 1]
@@ -274,9 +272,9 @@ class SymbolRemove(PyKepLib):
         """
         The method removes a character from a word or sentence accepted as a string
         second parameter and returns this word or sentence.
-        :param suggestion: str
-        :param removed_symbol: str
-        :return: str
+        :param suggestion: user word or sentence
+        :param removed_symbol: symbol must be removed
+        :return: word or sentence
         """
         try:
             return ' '.join(suggestion.split(removed_symbol))
