@@ -193,12 +193,9 @@ class Enigma(PyKepLib):
         :return: encoded string
         """
         try:
-            transfer_first, transfer_second = [], []
-            for i in [i for i in text]:
-                transfer_first.append(self.get_coding_or_decoding_dict()[0][i])
-            for i in [i for i in ''.join(transfer_first)]:
-                transfer_second.append(self.get_coding_or_decoding_dict()[1][i])
-            return ''.join(transfer_second)
+            dict_zero = [self.get_coding_or_decoding_dict()[0][i] for i in [i for i in text]]
+            dict_one = [self.get_coding_or_decoding_dict()[1][i] for i in [i for i in dict_zero]]
+            return ''.join(dict_one)
         except KeyError:
             self.logger.error('Encoding error!')
 
@@ -210,17 +207,14 @@ class Enigma(PyKepLib):
         :return: decoded string of text, numbers or symbols
         """
         try:
-            iteration_value = len(str(code))
             counter = 0
-            transfer_first, transfer_second, transfer_third = [], [], []
-            for i in range(iteration_value // 3):
+            transfer_first = []
+            for i in range(len(str(code)) // 3):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
-            for i in transfer_first:
-                transfer_second.append(self.get_coding_or_decoding_dict()[2][i])
-            for i in transfer_second:
-                transfer_third.append(self.get_coding_or_decoding_dict()[3][i])
-            return ''.join(transfer_third)
+            dict_two = [self.get_coding_or_decoding_dict()[2][i] for i in transfer_first]
+            dict_three = [self.get_coding_or_decoding_dict()[3][i] for i in dict_two]
+            return ''.join(dict_three)
         except KeyError:
             self.logger.error('Encoding error!')
 
