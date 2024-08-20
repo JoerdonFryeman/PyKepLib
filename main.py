@@ -68,12 +68,12 @@ def remove_symbols_example():
     )
 
 
-def get_random_data_example():
+def get_random_data_example(user_data=(0, '1', 2, '3', 4, '5', 'Ω', 'λ', 'π', 'Σ', 'ω')):
+    random_data = rd.get_random_data()
     while True:
-        x = rd.get_random_data((0, '1', 2, '3', 4, '5', 'Ω', 'λ', 'π', 'Σ', 'ω'))
-        if not x:
+        if not random_data(user_data):
             continue
-        rd.logger.info(f'Example of the function "get_random_data": {x} | {rd.transfer_list}')
+        rd.logger.info(f'Example of the function "get_random_data": {random_data.__closure__[0].cell_contents}')
         sleep(0.3)
 
 

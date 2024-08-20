@@ -46,7 +46,8 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         self.assertEqual(self.decoding('222406695695474553948474635695399736'), 'Hello world!')
 
     def test_get_random_data(self):
-        self.assertEqual(self.get_random_data(('λ',)), 'λ')
+        random_data = self.get_random_data()
+        self.assertEqual(random_data(('λ',)), 'λ')
 
     def test_remove_symbols_return_word(self):
         self.assertEqual(

@@ -207,11 +207,11 @@ class Enigma(PyKepLib):
         :return: decoded string of text, numbers or symbols
         """
         try:
-            counter = 0
+            _counter = 0
             transfer_first = []
             for i in range(len(str(code)) // 3):
-                transfer_first.append(''.join(str(code)[counter:3 + counter]))
-                counter += 3
+                transfer_first.append(''.join(str(code)[_counter:3 + _counter]))
+                _counter += 3
             dict_two = [self.get_coding_or_decoding_dict()[2][i] for i in transfer_first]
             dict_three = [self.get_coding_or_decoding_dict()[3][i] for i in dict_two]
             return ''.join(dict_three)
@@ -220,26 +220,29 @@ class Enigma(PyKepLib):
 
 
 class GetRandomData(PyKepLib):
-    transfer_list = []
-
-    def get_random_data(self, data_list: list | tuple | set) -> str:
+    @staticmethod
+    def get_random_data():
         """
         The method accepts a list or tuple of objects, adds them to the transfer_list
         with the help of a loop of GetRandomData class and returns them in random order without repeating.
-        :param data_list: list of user data
         :return: random data without repeating
         """
-        try:
-            data = choice(list(data_list) or tuple(data_list))
-            if data not in self.transfer_list:
-                self.transfer_list.append(data)
-                if len(self.transfer_list) == len(data_list):
-                    self.transfer_list.clear()
-                return data
-            else:
-                return ''
-        except ValueError:
-            pass
+        transfer_list = []
+
+        def inner_function(inner_data: str) -> list | str:
+            try:
+                choice_data = choice(list(inner_data) or tuple(inner_data))
+                if choice_data not in transfer_list:
+                    transfer_list.append(choice_data)
+                    if len(transfer_list) == len(inner_data):
+                        transfer_list.clear()
+                    return choice_data
+                else:
+                    return ''
+            except ValueError:
+                pass
+
+        return inner_function
 
 
 class SymbolRemove(PyKepLib):
