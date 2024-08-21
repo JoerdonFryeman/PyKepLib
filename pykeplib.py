@@ -3,6 +3,7 @@ from ctypes import *
 from json import load
 from time import sleep
 from platform import system
+from typing import Callable
 from random import choice, randint
 from logging import config, getLogger
 
@@ -171,14 +172,15 @@ class Visual(PyKepLib):
             sentence = [i for i in text]
             for i in range(len(sentence)):
                 _counter_second += 1
-                if _counter_first == 1:
-                    sleep(float(f'0.{randint(1, 3)}'))
-                elif _counter_first == 2:
-                    sleep(float(f'0.{randint(2, 4)}'))
-                elif _counter_first == 3:
-                    sleep(float(f'0.{randint(1, 3)}'))
-                else:
-                    sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
+                match _counter_first:
+                    case 1:
+                        sleep(float(f'0.{randint(1, 3)}'))
+                    case 2:
+                        sleep(float(f'0.{randint(2, 4)}'))
+                    case 3:
+                        sleep(float(f'0.{randint(1, 3)}'))
+                    case _:
+                        sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
                 os.system(self.get_system_command())
                 print(''.join(sentence[0:_counter_second]))
             sleep(float(4))
@@ -221,7 +223,7 @@ class Enigma(PyKepLib):
 
 class GetRandomData(PyKepLib):
     @staticmethod
-    def get_random_data():
+    def get_random_data() -> Callable[[list | tuple], str | int | float]:
         """
         The method accepts a list or tuple of objects, adds them to the transfer_list
         with the help of a loop of GetRandomData class and returns them in random order without repeating.
@@ -229,9 +231,9 @@ class GetRandomData(PyKepLib):
         """
         transfer_list = []
 
-        def inner_function(inner_data: str) -> list | str:
+        def inner_function(inner_data: list | tuple) -> str | int | float:
             try:
-                choice_data = choice(list(inner_data) or tuple(inner_data))
+                choice_data = choice(inner_data)
                 if choice_data not in transfer_list:
                     transfer_list.append(choice_data)
                     if len(transfer_list) == len(inner_data):
