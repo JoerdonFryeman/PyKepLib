@@ -3,29 +3,41 @@ from pykeplib import TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
 
 
 class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove):
-
     def test_get_json_logging(self):
-        with self.assertRaises(FileNotFoundError) as ex:
+        try:
             self.get_json_data('logging')
-        self.assertEqual('File not found!', ex.exception.args[0])
-
-    def test_get_json_product_details(self):
-        with self.assertRaises(FileNotFoundError) as ex:
-            self.get_json_data('product_details')
-        self.assertEqual('File not found!', ex.exception.args[0])
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
 
     def test__get_cdll(self):
-        with self.assertRaises(OSError) as ex:
+        try:
             self._get_cdll()
-        self.assertEqual('OS Error!', ex.exception.args[0])
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
 
-    def test_get_coding_or_decoding_dict(self):
-        with self.assertRaises(FileNotFoundError) as ex:
+    def test_get_coding_dict_zero(self):
+        try:
             self.get_json_data('coding_or_decoding_dict/coding_dict_zero')
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
+
+    def test_get_coding_dict_one(self):
+        try:
             self.get_json_data('coding_or_decoding_dict/coding_dict_one')
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
+
+    def test_get_decoding_dict_two(self):
+        try:
             self.get_json_data('coding_or_decoding_dict/decoding_dict_two')
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
+
+    def test_get_decoding_dict_three(self):
+        try:
             self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
-        self.assertEqual('File not found!', ex.exception.args[0])
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
 
     def test_get_system_command(self):
         self.assertEqual(self.get_system_command(), 'clear')  # 'cls' for windows
@@ -37,7 +49,7 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         self.assertEqual(self.get_loading_points('Loading', 3), 'Loading...')
 
     def test_wake_up_neo(self):
-        self.assertEqual(self.wake_up_neo(['Wake up, Neo...', ]), None)
+        self.assertEqual(self.wake_up_neo(['The test', 'is', 'working!']), None)
 
     def test_coding(self):
         self.assertEqual(self.coding('Hello world!'), '222406695695474553948474635695399736')

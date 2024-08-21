@@ -22,7 +22,7 @@ class Base:
     @staticmethod
     def get_json_data(name: str) -> dict:
         try:
-            with open(f'{name}.json') as file:
+            with open(f'{name}.json', encoding='UTF-8') as file:
                 data = load(file)
             return data
         except FileNotFoundError:
