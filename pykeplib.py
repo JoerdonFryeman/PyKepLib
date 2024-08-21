@@ -3,7 +3,6 @@ from ctypes import *
 from json import load
 from time import sleep
 from platform import system
-from typing import Callable
 from random import choice, randint
 from logging import config, getLogger
 
@@ -137,10 +136,14 @@ class Visual(PyKepLib):
         :param counter: counter of the points
         :return: text with the points
         """
-        return {
-            0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
-            2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
-        }[counter](text)
+        if counter == 0:
+            return f'{text}   '
+        elif counter == 1:
+            return f'{text}.  '
+        elif counter == 2:
+            return f'{text}.. '
+        elif counter == 3:
+            return f'{text}...'
 
     def loading_points_decorator(self, func, text='Loading'):
         def wrapper(*args):
@@ -223,7 +226,7 @@ class Enigma(PyKepLib):
 
 class GetRandomData(PyKepLib):
     @staticmethod
-    def get_random_data() -> Callable[[list | tuple], str | int | float]:
+    def get_random_data():
         """
         The method accepts a list or tuple of objects, adds them to the transfer_list
         with the help of a loop of GetRandomData class and returns them in random order without repeating.
