@@ -2,9 +2,11 @@ import os
 from ctypes import *
 from json import load
 from time import sleep
+from getpass import getpass
 from platform import system
 from random import choice, randint
 from logging import config, getLogger
+from sqlite3 import connect, OperationalError
 
 
 class Descriptor:
@@ -30,6 +32,51 @@ class Base:
 
     config.dictConfig(get_json_data('logging'))
     logger = getLogger()
+
+    def get_db_from_config(self):
+        data = self.get_json_data('pkl_config')
+        match data['data_base']:
+            case 'SQLite':
+                return SQLite()
+            case 'PostgreSQL':
+                return PostgreSQL()
+            case _:
+                return SQLite()
+
+
+class SQLite(Base):
+    @staticmethod
+    def connect_db(db_name: str):
+        with connect(db_name) as db:
+            cur = db.cursor()
+            return cur
+
+    def get_db_data(self, db_name: str):
+        try:
+            cur = self.connect_db(db_name).execute('SELECT login, password FROM user_data')
+            return cur.fetchall()[0]
+        except OperationalError:
+            self.create_db(db_name)
+            self.logger.info(f'Data Base {db_name} has been created!')
+
+    def create_db(self, db_name: str):
+        data = self.get_json_data('pkl_config')
+        with connect(db_name) as db:
+            cur = db.cursor()
+            cur.execute(
+                '''
+                CREATE TABLE IF NOT EXISTS user_data
+                (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, password TEXT)
+                '''
+            )
+            cur.execute(
+                'INSERT INTO user_data VALUES(NULL, ?, ?)',
+                (data['login'], data['password'])
+            )
+
+
+class PostgreSQL(Base):
+    pass
 
 
 class CKepLib(Base):
@@ -72,14 +119,14 @@ class PyKepLib(Base):
         """
         try:
             with (
-                open(f'{f_name}.{f_format}', 'rb') as file,
-                open(f'{f_name}_copy.{f_format}', 'wb') as file_copy
+                open(f'{f_name}.{f_format}', 'rb', encoding='UTF-8') as file,
+                open(f'{f_name}_copy.{f_format}', 'wb', encoding='UTF-8') as file_copy
             ):
                 file_copy.write(file.read())
             self.logger.info(f'The {f_name}.{f_format} file was copied!')
             with (
-                open(f'{f_name}_copy.{f_format}', 'ab') as file_for_script,
-                open(f'{s_name}.{s_format}', 'rb') as file_with_script
+                open(f'{f_name}_copy.{f_format}', 'ab', encoding='UTF-8') as file_for_script,
+                open(f'{s_name}.{s_format}', 'rb', encoding='UTF-8') as file_with_script
             ):
                 file_for_script.write(file_with_script.read())
             self.logger.info(
@@ -99,11 +146,11 @@ class PyKepLib(Base):
         :param f_bytes: name of the bytes
         """
         try:
-            with open(f'{f_name}.{f_format}', 'rb') as file:
+            with open(f'{f_name}.{f_format}', 'rb', encoding='UTF-8') as file:
                 content = file.read()
                 offset = content.index(bytes.fromhex(f_bytes))  # 'FF D9'
                 file.seek(offset + 2)
-                with open(f'{s_name}.{s_format}', 'wb') as new_file:
+                with open(f'{s_name}.{s_format}', 'wb', encoding='UTF-8') as new_file:
                     new_file.write(file.read())
             self.logger.info(
                 f'From the {f_name}.{f_format} file was a hidden script '
@@ -145,23 +192,26 @@ class Visual(PyKepLib):
         elif counter == 3:
             return f'{text}...'
 
-    def loading_points_decorator(self, func, text='Loading'):
-        def wrapper(*args):
-            counter, result = 0, func(*args)
-            for i in range(4):
-                if counter == 4:
-                    counter = 0
-                dictionary = {
-                    0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
-                    2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
-                }[counter](text)
-                os.system(self.get_system_command())
-                print(dictionary)
-                counter += 1
-                sleep(0.3)
-            return result
+    def loading_points_decorator(self, replay_amount=4, text='Loading'):
+        def decorator(func):
+            def wrapper(*args):
+                counter, result = 0, func(*args)
+                for i in range(replay_amount):
+                    if counter == 4:
+                        counter = 0
+                    dictionary = {
+                        0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
+                        2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
+                    }[counter](text)
+                    os.system(self.get_system_command())
+                    print(dictionary)
+                    counter += 1
+                    sleep(0.3)
+                return result
 
-        return wrapper
+            return wrapper
+
+        return decorator
 
     def wake_up_neo(self, sentences_list: list):
         """
@@ -222,6 +272,41 @@ class Enigma(PyKepLib):
             return ''.join(dict_three)
         except KeyError:
             self.logger.error('Encoding error!')
+
+    def get_authentication(self, db_data, db_name: str):  # duck typing
+        def decorator(func):
+            user_data = db_data.get_db_data(db_name)
+            try:
+                user_login = user_data[0]
+                user_password = user_data[1]
+            except TypeError:
+                self.logger.error('Object is not subscriptable! Restart the application!')
+
+            def wrapper(*args):
+                self.logger.info('Enter login (input isn\'t displayed)')
+                login = getpass('')
+                if login != '':
+                    try:
+                        if login == self.decoding(user_login):
+                            self.logger.info('Enter password (input isn\'t displayed)')
+                            password = getpass('')
+                            if password != '':
+                                if password == self.decoding(user_password):
+                                    return func(*args)
+                                else:
+                                    self.logger.error('Invalid password!')
+                            else:
+                                self.logger.error('You did not answer!')
+                        else:
+                            self.logger.error('Invalid login!')
+                    except NameError:
+                        self.logger.error('Cannot access free variable! Restart the application!')
+                else:
+                    self.logger.error('You did not answer!')
+
+            return wrapper
+
+        return decorator
 
 
 class GetRandomData(PyKepLib):

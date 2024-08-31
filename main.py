@@ -20,7 +20,9 @@ def coding_and_decoding_example():
     )
 
 
+@enigma.get_authentication(enigma.get_db_from_config(), 'pkl_sql.db')
 def get_loading_points_example():
+    """login: Kepler, password: 54"""
     counter = 0
     while True:
         if counter == 4:
@@ -32,8 +34,9 @@ def get_loading_points_example():
         sleep(0.3)
 
 
-@visual.loading_points_decorator
+@visual.loading_points_decorator(8, 'loading')
 def get_loading_points_example_decorator():
+    """Example of the loading_points_decorator"""
     pass
 
 
