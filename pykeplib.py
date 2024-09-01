@@ -10,6 +10,8 @@ from sqlite3 import connect, OperationalError
 
 
 class Descriptor:
+    """The descriptor for your project"""
+
     def __set_name__(self, owner, name):
         self.name = f"_{name}"
 
@@ -23,6 +25,11 @@ class Descriptor:
 class Base:
     @staticmethod
     def get_json_data(name: str) -> dict:
+        """
+        The method returns the json format data
+        :param name: file name
+        :return: json data
+        """
         try:
             with open(f'{name}.json', encoding='UTF-8') as file:
                 data = load(file)
@@ -33,13 +40,15 @@ class Base:
     config.dictConfig(get_json_data('logging'))
     logger = getLogger()
 
-    def get_db_from_config(self):
+    def get_db_from_config(self) -> object:
+        """
+        The method returns the database used in the project
+        :return: database class
+        """
         data = self.get_json_data('pkl_config')
         match data['data_base']:
             case 'SQLite':
                 return SQLite()
-            case 'PostgreSQL':
-                return PostgreSQL()
             case _:
                 return SQLite()
 
@@ -47,11 +56,21 @@ class Base:
 class SQLite(Base):
     @staticmethod
     def connect_db(db_name: str):
+        """
+        The method makes connect with database
+        :param db_name: name of database
+        :return: cursor object
+        """
         with connect(db_name) as db:
             cur = db.cursor()
             return cur
 
-    def get_db_data(self, db_name: str):
+    def get_db_data(self, db_name: str) -> tuple:
+        """
+        The method returns a tuple of data from database
+        :param db_name: name of database
+        :return: tuple of data
+        """
         try:
             cur = self.connect_db(db_name).execute('SELECT login, password FROM user_data')
             return cur.fetchall()[0]
@@ -60,6 +79,10 @@ class SQLite(Base):
             self.logger.info(f'Data Base {db_name} has been created!')
 
     def create_db(self, db_name: str):
+        """
+        The method create a database and table of data if not exists
+        :param db_name: name of database
+        """
         data = self.get_json_data('pkl_config')
         with connect(db_name) as db:
             cur = db.cursor()
@@ -75,21 +98,22 @@ class SQLite(Base):
             )
 
 
-class PostgreSQL(Base):
-    pass
-
-
 class CKepLib(Base):
     @staticmethod
     def _get_cdll():
+        """
+        The method returns a dynamic library and allows you to wrap C code in it and use it in Python
+        :return cdll: dynamic library
+        """
         try:
-            return CDLL('./ckeplib.so')
+            return CDLL('./ckeplib.so')  # ckeplib.dll
         except OSError:
             raise OSError('OS Error!')
 
 
 class PyKepLib(Base):
     def __create_coding_or_decoding_dict(self):
+        """The method returns the dictionary of coding and decoding"""
         try:
             coding_or_decoding_dict = (
                 self.get_json_data('coding_or_decoding_dict/coding_dict_zero'),
@@ -103,15 +127,17 @@ class PyKepLib(Base):
 
     @property
     def get_coding_or_decoding_dict(self):
+        """Getting with property the __create_coding_or_decoding_dict method"""
         return self.__create_coding_or_decoding_dict
 
     @staticmethod
     def get_system_command() -> str:
+        """The method returns the required command depending on the system"""
         return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
 
     def make_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str):
         """
-        The function makes the script hidden in the file
+        The method makes the script hidden in the file
         :param f_name: name of the file
         :param f_format: files format
         :param s_name: name of the script
@@ -138,7 +164,7 @@ class PyKepLib(Base):
 
     def get_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str, f_bytes: str):
         """
-        The function pulls a hidden script from a file
+        The method pulls a hidden script from a file
         :param f_name: name of the file
         :param f_format: files format
         :param s_name: name of the script
@@ -163,10 +189,13 @@ class PyKepLib(Base):
 
 
 class TheCPower(CKepLib):
-    def get_exponentiation(self, value):
+    def get_exponentiation(self, value: int):
+        """The method returns the exponentiation of the value with C code"""
         return self._get_cdll().main(value)
 
     def get_exponentiation_decorator(self, func):
+        """The decorator returns the exponentiation of the value with C code"""
+
         def wrapper(*args):
             return func(self._get_cdll().main(*args))
 
@@ -177,8 +206,7 @@ class Visual(PyKepLib):
     @staticmethod
     def get_loading_points(text: str, counter: int) -> str:
         """
-        The method takes the counter value as a dictionary key and
-        returns different number of points for different counter values.
+        The method takes the counter of value and returns different number of points for different counter values
         :param text: user text
         :param counter: counter of the points
         :return: text with the points
@@ -193,6 +221,11 @@ class Visual(PyKepLib):
             return f'{text}...'
 
     def loading_points_decorator(self, replay_amount=4, text='Loading'):
+        """
+        The decorator takes the counter of value as a dictionary key and
+        returns different number of points for different counter values
+        """
+
         def decorator(func):
             def wrapper(*args):
                 counter, result = 0, func(*args)
@@ -215,17 +248,17 @@ class Visual(PyKepLib):
 
     def wake_up_neo(self, sentences_list: list):
         """
-        The function takes a list of words and return as a printed input
+        The method takes a list of words and return as a printed input
         :param sentences_list: list of user sentences
         """
         _counter_first = 0
-        for text in sentences_list:
+        for text in sentences_list:  # splitting of separate sentences into a list of letters
             _counter_first += 1
             _counter_second = 0
             sentence = [i for i in text]
             for i in range(len(sentence)):
                 _counter_second += 1
-                match _counter_first:
+                match _counter_first:  # return a random float value from 0.1 to 0.3
                     case 1:
                         sleep(float(f'0.{randint(1, 3)}'))
                     case 2:
@@ -235,7 +268,7 @@ class Visual(PyKepLib):
                     case _:
                         sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
                 os.system(self.get_system_command())
-                print(''.join(sentence[0:_counter_second]))
+                print(''.join(sentence[0:_counter_second]))  # printing the sentence on the screen
             sleep(float(4))
 
 
@@ -274,6 +307,13 @@ class Enigma(PyKepLib):
             self.logger.error('Encoding error!')
 
     def get_authentication(self, db_data, db_name: str):  # duck typing
+        """
+        The decorator takes the login and password from the database, decodes and validates them
+        :param db_data: data from database
+        :param db_name: name of database
+        :return: function access
+        """
+
         def decorator(func):
             user_data = db_data.get_db_data(db_name)
             try:
