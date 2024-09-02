@@ -10,6 +10,8 @@ def main():
 ### Unittests configuration
 Script path: /PyKepLib/tests/tests.py
 Working directory: /PyKepLib
+### Command to create a dynamic library
+gcc -fPIC -shared -o ckeplib.so main.c
 ### My list of interesting libraries
 1. customtkinter — is a python desktop UI-library based on Tkinter, which provides modern looking and fully customizable widgets.
 2. moviepy — is a Python library for video editing: cutting, concatenations, title insertions, video compositing, video processing, and creation of custom effects.

@@ -45,12 +45,27 @@ class Base:
         The method returns the database used in the project
         :return: database class
         """
-        data = self.get_json_data('pkl_config')
-        match data['data_base']:
-            case 'SQLite':
-                return SQLite()
-            case _:
-                return SQLite()
+        try:
+            data = self.get_json_data('pkl_config')
+            match data['data_base']:
+                case 'SQLite':
+                    return SQLite
+                case _:
+                    return SQLite
+        except FileNotFoundError:
+            self.logger.error('File not found!')
+
+    @staticmethod
+    def select_os_command(command: str) -> str:
+        """
+        The method returns the required command depending on the system
+        :return: command
+        """
+        match command:
+            case 'clear_screen':
+                return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
+            case 'library_format':
+                return {'Linux': lambda: '.so', 'Windows': lambda: '.dll'}[system()]()
 
 
 class SQLite(Base):
@@ -99,15 +114,18 @@ class SQLite(Base):
 
 
 class CKepLib(Base):
-    @staticmethod
-    def _get_cdll():
+    def _get_cdll(self):
         """
         The method returns a dynamic library and allows you to wrap C code in it and use it in Python
         :return cdll: dynamic library
         """
         try:
-            return CDLL('./ckeplib.so')  # ckeplib.dll
+            self.logger.info(
+                f'The file ./ckeplib{self.select_os_command('library_format')} in the function {self} was read!'
+            )
+            return CDLL(f'./ckeplib{self.select_os_command('library_format')}')
         except OSError:
+            self.logger.error('OS Error!')
             raise OSError('OS Error!')
 
 
@@ -123,17 +141,13 @@ class PyKepLib(Base):
             )
             return coding_or_decoding_dict
         except FileNotFoundError:
+            self.logger.error('File not found!')
             raise FileNotFoundError('File not found!')
 
     @property
     def get_coding_or_decoding_dict(self):
         """Getting with property the __create_coding_or_decoding_dict method"""
         return self.__create_coding_or_decoding_dict
-
-    @staticmethod
-    def get_system_command() -> str:
-        """The method returns the required command depending on the system"""
-        return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
 
     def make_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str):
         """
@@ -145,14 +159,14 @@ class PyKepLib(Base):
         """
         try:
             with (
-                open(f'{f_name}.{f_format}', 'rb', encoding='UTF-8') as file,
-                open(f'{f_name}_copy.{f_format}', 'wb', encoding='UTF-8') as file_copy
+                open(f'{f_name}.{f_format}', 'rb') as file,
+                open(f'{f_name}_copy.{f_format}', 'wb') as file_copy
             ):
                 file_copy.write(file.read())
             self.logger.info(f'The {f_name}.{f_format} file was copied!')
             with (
-                open(f'{f_name}_copy.{f_format}', 'ab', encoding='UTF-8') as file_for_script,
-                open(f'{s_name}.{s_format}', 'rb', encoding='UTF-8') as file_with_script
+                open(f'{f_name}_copy.{f_format}', 'ab') as file_for_script,
+                open(f'{s_name}.{s_format}', 'rb') as file_with_script
             ):
                 file_for_script.write(file_with_script.read())
             self.logger.info(
@@ -161,6 +175,7 @@ class PyKepLib(Base):
             )
         except FileNotFoundError:
             self.logger.error('File not found!')
+            raise FileNotFoundError('File not found!')
 
     def get_script_hidden_in_file(self, f_name: str, f_format: str, s_name: str, s_format: str, f_bytes: str):
         """
@@ -172,11 +187,11 @@ class PyKepLib(Base):
         :param f_bytes: name of the bytes
         """
         try:
-            with open(f'{f_name}.{f_format}', 'rb', encoding='UTF-8') as file:
+            with open(f'{f_name}.{f_format}', 'rb') as file:
                 content = file.read()
-                offset = content.index(bytes.fromhex(f_bytes))  # 'FF D9'
+                offset = content.index(bytes.fromhex(f_bytes))
                 file.seek(offset + 2)
-                with open(f'{s_name}.{s_format}', 'wb', encoding='UTF-8') as new_file:
+                with open(f'{s_name}.{s_format}', 'wb') as new_file:
                     new_file.write(file.read())
             self.logger.info(
                 f'From the {f_name}.{f_format} file was a hidden script '
@@ -184,8 +199,10 @@ class PyKepLib(Base):
             )
         except FileNotFoundError:
             self.logger.error('File not found!')
+            raise FileNotFoundError('File not found!')
         except ValueError:
             self.logger.error('Subsection not found!')
+            raise ValueError('Subsection not found!')
 
 
 class TheCPower(CKepLib):
@@ -236,7 +253,7 @@ class Visual(PyKepLib):
                         0: lambda x: f'{text}   ', 1: lambda x: f'{text}.  ',
                         2: lambda x: f'{text}.. ', 3: lambda x: f'{text}...',
                     }[counter](text)
-                    os.system(self.get_system_command())
+                    os.system(self.select_os_command('clear_screen'))
                     print(dictionary)
                     counter += 1
                     sleep(0.3)
@@ -267,7 +284,7 @@ class Visual(PyKepLib):
                         sleep(float(f'0.{randint(1, 3)}'))
                     case _:
                         sleep(float(f'0.{randint(randint(1, 2), randint(3, 4))}'))
-                os.system(self.get_system_command())
+                os.system(self.select_os_command('clear_screen'))
                 print(''.join(sentence[0:_counter_second]))  # printing the sentence on the screen
             sleep(float(4))
 
@@ -306,7 +323,7 @@ class Enigma(PyKepLib):
         except KeyError:
             self.logger.error('Encoding error!')
 
-    def get_authentication(self, db_data, db_name: str):  # duck typing
+    def get_authentication_decorator(self, db_data, db_name: str):  # duck typing
         """
         The decorator takes the login and password from the database, decodes and validates them
         :param db_data: data from database
@@ -315,7 +332,7 @@ class Enigma(PyKepLib):
         """
 
         def decorator(func):
-            user_data = db_data.get_db_data(db_name)
+            user_data = db_data().get_db_data(db_name)
             try:
                 user_login = user_data[0]
                 user_password = user_data[1]
@@ -332,6 +349,7 @@ class Enigma(PyKepLib):
                             password = getpass('')
                             if password != '':
                                 if password == self.decoding(user_password):
+                                    self.logger.info('Authentication has been successfully completed!')
                                     return func(*args)
                                 else:
                                     self.logger.error('Invalid password!')

@@ -10,6 +10,7 @@ cp = TheCPower()
 
 
 def coding_and_decoding_example():
+    """Example of the coding and decoding functions"""
     enigma.logger.info(
         f'Example of encoding a message using the method "coding": '
         f'{enigma.coding("Hello world!")}'
@@ -20,32 +21,35 @@ def coding_and_decoding_example():
     )
 
 
-@enigma.get_authentication(enigma.get_db_from_config(), 'pkl_sql.db')
+@enigma.get_authentication_decorator(enigma.get_db_from_config(), 'pkl_sql.db')
 def get_loading_points_example():
-    """login: Kepler, password: 54"""
+    """
+    Example of the get_authentication_decorator and get_loading_points functions
+    login: Kepler, password: 54
+    """
     counter = 0
     while True:
         if counter == 4:
             counter = 0
-        os.system(visual.get_system_command())
-        visual.logger.info('example of the method usage "get_system_command"')
-        visual.logger.info(visual.get_loading_points('Loading', counter))
+        os.system(visual.select_os_command('clear_screen'))
+        print(visual.get_loading_points('Loading', counter))
         counter += 1
         sleep(0.3)
 
 
 @visual.loading_points_decorator(8, 'loading')
 def get_loading_points_example_decorator():
-    """Example of the loading_points_decorator"""
+    """Example of the loading_points_decorator function"""
     pass
 
 
 def get_wake_up_neo_text():
+    """Example of the wake_up_neo function"""
     visual.wake_up_neo(['Wake up, Neo...', 'The Matrix has you...', 'Follow the white rabbit.'])
-    os.system(visual.get_system_command())
+    os.system(visual.select_os_command('clear_screen'))
     print('Knock, knock, Neo.')
     sleep(4.2)
-    os.system(visual.get_system_command())
+    os.system(visual.select_os_command('clear_screen'))
 
     def get_user_text():
         sentences_list, enter = [], True
@@ -58,6 +62,7 @@ def get_wake_up_neo_text():
 
 
 def remove_symbols_example():
+    """Example of the remove_symbols_return_word and remove_symbols_from_sentence functions"""
     sr.logger.info(
         sr.remove_symbols_return_word(
             f"deleted_Example_deleted", '_', 2
@@ -72,34 +77,40 @@ def remove_symbols_example():
 
 
 def get_random_data_example(user_data=(0, '1', 2, '3', 4, '5', 'Ω', 'λ', 'π', 'Σ', 'ω')):
+    """Example of the get_random_data function"""
     random_data = rd.get_random_data()
     while True:
         if not random_data(user_data):
             continue
-        rd.logger.info(f'Example of the function "get_random_data": {random_data.__closure__[0].cell_contents}')
+        print(f'Example of the function "get_random_data": {random_data.__closure__[0].cell_contents}')
         sleep(0.3)
 
 
-@cp.get_exponentiation_decorator
-def get_exponentiation_example(value: int):
-    print(value)
-
-
-def get_cubed_example(value: int):
+def get_cubed(value: int):
+    """Example of the get_exponentiation function"""
     cubed = cp.get_exponentiation(value) * value
     print(cubed)
 
 
+@cp.get_exponentiation_decorator
+def get_exponentiation_decorator(value: int):
+    """Example of the get_exponentiation_decorator function"""
+    print(value)
+
+
 def manipulate_with_script_in_file():
-    visual.make_script_hidden_in_file('example', 'png', 'example', 'exe')
-    visual.get_script_hidden_in_file('example_copy', 'png', 'example_copy', 'exe', 'FF D9')
+    """Example of the make_script_hidden_in_file and get_script_hidden_in_file functions"""
+    visual.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
+    visual.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
 
 
 def get_welcome_script():
+    """Welcome script function"""
     print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/kepler54\n")
 
 
 def main():
+    """Entry point function"""
     get_welcome_script()
 
 

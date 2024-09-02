@@ -1,13 +1,19 @@
 from unittest import TestCase, main
-from pykeplib import TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
+from pykeplib import SQLite, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
 
 
 class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove):
-    def test_get_json_logging(self):
+    def test_get_json_data(self):
         try:
             self.get_json_data('logging')
         except Exception as e:
             self.fail(f'Function raised an exception {e}')
+
+    def test_get_db_from_config(self):
+        self.assertEqual(self.get_db_from_config(), SQLite)
+
+    def test_select_os_command(self):
+        self.assertEqual(self.select_os_command('library_format'), '.so')  # 'dll' for windows
 
     def test__get_cdll(self):
         try:
@@ -39,10 +45,20 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
         except Exception as e:
             self.fail(f'Function raised an exception {e}')
 
-    def test_get_system_command(self):
-        self.assertEqual(self.get_system_command(), 'clear')  # 'cls' for windows
+    def test_make_and_get_script_hidden_in_file(self):
+        try:
+            self.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
+            try:
+                self.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
+            except Exception as e:
+                self.fail(f'Function raised an exception {e}')
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
 
     def test_get_exponentiation(self):
+        self.assertEqual(self.get_exponentiation(5), 25)
+
+    def test_get_exponentiation_decorator(self):
         self.assertEqual(self.get_exponentiation(5), 25)
 
     def test_get_loading_points(self):
