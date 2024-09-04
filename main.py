@@ -1,23 +1,24 @@
 import os
 from time import sleep
-from pykeplib import Enigma, Visual, SymbolRemove, GetRandomData, TheCPower
+from pykeplib import Enigma, Visual, TextWorking, DataProcessing, TheCPower, FileHandling
 
 enigma = Enigma()
 visual = Visual()
-sr = SymbolRemove()
-rd = GetRandomData()
-cp = TheCPower()
+text_working = TextWorking()
+data_processing = DataProcessing()
+the_c_power = TheCPower()
+file_handling = FileHandling()
 
 
 def coding_and_decoding_example():
     """Example of the coding and decoding functions"""
     enigma.logger.info(
         f'Example of encoding a message using the method "coding": '
-        f'{enigma.coding("Hello world!")}'
+        f'{enigma.coding("Hello world!")}\n{enigma.get_doc('coding')}'
     )
     enigma.logger.info(
         f'Example of decoding a message using the method "decoding": '
-        f'{enigma.decoding("222406695695474553948474635695399736")}'
+        f'{enigma.decoding("222406695695474553948474635695399736")}\n{enigma.get_doc('coding')}'
     )
 
 
@@ -28,19 +29,22 @@ def get_loading_points_example():
     login: Kepler, password: 54
     """
     counter = 0
-    while True:
+    for i in range(8):
         if counter == 4:
             counter = 0
         os.system(visual.select_os_command('clear_screen'))
         print(visual.get_loading_points('Loading', counter))
         counter += 1
         sleep(0.3)
+    enigma.logger.info(f"\n{enigma.get_doc('get_authentication_decorator')}")
+    visual.logger.info(f"\n{visual.get_doc('get_loading_points')}")
 
 
 @visual.loading_points_decorator(8, 'loading')
 def get_loading_points_example_decorator():
     """Example of the loading_points_decorator function"""
-    pass
+    visual.logger.info(f"\n{visual.get_doc('loading_points_decorator')}")
+    sleep(7)
 
 
 def get_wake_up_neo_text():
@@ -59,49 +63,57 @@ def get_wake_up_neo_text():
         visual.wake_up_neo(sentences_list)
 
     get_user_text()
+    visual.logger.info(f"\n{visual.get_doc('wake_up_neo')}")
 
 
 def remove_symbols_example():
     """Example of the remove_symbols_return_word and remove_symbols_from_sentence functions"""
-    sr.logger.info(
-        sr.remove_symbols_return_word(
+    text_working.logger.info(
+        text_working.remove_symbols_return_word(
             f"deleted_Example_deleted", '_', 2
         )
     )
-    sr.logger.info(
-        sr.remove_symbols_from_sentence(
+    text_working.logger.info(
+        text_working.remove_symbols_from_sentence(
             f'of_the_method_functional "remove_symbols_return_word"'
             f' и "remove_symbols_from_sentence"', '_'
-        )
+        ) + '\n'
     )
+    text_working.logger.info(f"\n{text_working.get_doc('remove_symbols_return_word')}")
+    text_working.logger.info(f"\n{text_working.get_doc('remove_symbols_from_sentence')}")
 
 
 def get_random_data_example(user_data=(0, '1', 2, '3', 4, '5', 'Ω', 'λ', 'π', 'Σ', 'ω')):
     """Example of the get_random_data function"""
-    random_data = rd.get_random_data()
-    while True:
+    random_data = data_processing.get_random_data()
+    for i in range(61):
         if not random_data(user_data):
             continue
         print(f'Example of the function "get_random_data": {random_data.__closure__[0].cell_contents}')
         sleep(0.3)
+    data_processing.logger.info(f"\n{data_processing.get_doc('get_random_data')}")
 
 
 def get_cubed(value: int):
     """Example of the get_exponentiation function"""
-    cubed = cp.get_exponentiation(value) * value
-    print(cubed)
+    cubed = the_c_power.get_exponentiation(value) * value  # cubed
+    print(f'\n{cubed}\n')
+    the_c_power.logger.info(f"\n{the_c_power.get_doc('get_exponentiation')}")
 
 
-@cp.get_exponentiation_decorator
+@the_c_power.get_exponentiation_decorator
 def get_exponentiation_decorator(value: int):
     """Example of the get_exponentiation_decorator function"""
-    print(value)
+    print(f'\n{value}\n')
+    the_c_power.logger.info(f"\n{the_c_power.get_doc('get_exponentiation_decorator')}")
 
 
 def manipulate_with_script_in_file():
     """Example of the make_script_hidden_in_file and get_script_hidden_in_file functions"""
-    visual.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
-    visual.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
+    file_handling.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
+    file_handling.logger.info(f"\n{file_handling.get_doc('make_script_hidden_in_file')}")
+    file_handling.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
+    file_handling.logger.info(f"\n{file_handling.get_doc('get_script_hidden_in_file')}")
 
 
 def get_welcome_script():

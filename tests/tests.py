@@ -1,9 +1,10 @@
 from unittest import TestCase, main
-from pykeplib import SQLite, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove
+from pykeplib import SQLite, TheCPower, Visual, Enigma, DataProcessing, TextWorking, FileHandling
 
 
-class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRemove):
+class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, DataProcessing, TextWorking, FileHandling):
     def test_get_json_data(self):
+        """The doc text for testing the test_get_doc method"""
         try:
             self.get_json_data('logging')
         except Exception as e:
@@ -15,9 +16,12 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
     def test_select_os_command(self):
         self.assertEqual(self.select_os_command('library_format'), '.so')  # 'dll' for windows
 
-    def test__get_cdll(self):
+    def test_get_doc(self):
+        self.assertEqual(self.get_doc('test_get_json_data'), 'The doc text for testing the test_get_doc method')
+
+    def test_get_cdll(self):
         try:
-            self._get_cdll()
+            self.get_cdll()
         except Exception as e:
             self.fail(f'Function raised an exception {e}')
 
@@ -42,16 +46,6 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
     def test_get_decoding_dict_three(self):
         try:
             self.get_json_data('coding_or_decoding_dict/decoding_dict_three')
-        except Exception as e:
-            self.fail(f'Function raised an exception {e}')
-
-    def test_make_and_get_script_hidden_in_file(self):
-        try:
-            self.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
-            try:
-                self.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
-            except Exception as e:
-                self.fail(f'Function raised an exception {e}')
         except Exception as e:
             self.fail(f'Function raised an exception {e}')
 
@@ -90,6 +84,16 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, GetRandomData, SymbolRem
                 'Functional_of_the_method', '_'
             ), 'Functional of the method'
         )
+
+    def test_make_and_get_script_hidden_in_file(self):
+        try:
+            self.make_script_hidden_in_file('pykeplib', 'png', 'pykeplib', 'py')
+            try:
+                self.get_script_hidden_in_file('pykeplib_copy', 'png', 'pykeplib_copy', 'py', '60 82')
+            except Exception as e:
+                self.fail(f'Function raised an exception {e}')
+        except Exception as e:
+            self.fail(f'Function raised an exception {e}')
 
 
 if __name__ == '__main__':
