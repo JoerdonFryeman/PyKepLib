@@ -61,20 +61,19 @@ class Base:
         The method returns the required command depending on the system
         :return: command
         """
-        match command:
-            case 'clear_screen':
-                return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
-            case 'library_format':
-                return {'Linux': lambda: '.so', 'Windows': lambda: '.dll'}[system()]()
+        if command == 'clear_screen':
+            return {'Linux': lambda: 'clear', 'Windows': lambda: 'cls'}[system()]()
+        if command == 'library_format':
+            return {'Linux': lambda: '.so', 'Windows': lambda: '.dll'}[system()]()
 
     @classmethod
-    def get_doc(cls, key: str) -> str:
+    def get_method_info(cls, key: str, text: str):
         """
-        The method returns __doc__ of the method in the class in which it was called
+        The method returns __name__ or __doc__ of the method in the class in which it was called
         :param key: name of database
-        :return: __doc__
+        :param text: user text
         """
-        return cls.__dict__[key].__doc__
+        cls.logger.info(f'The method {cls.__dict__[key].__name__} {text}\n{cls.__dict__[key].__doc__}')
 
 
 class SQLite(Base):
@@ -129,9 +128,6 @@ class CKepLib(Base):
         :return cdll: dynamic library
         """
         try:
-            self.logger.info(
-                f'The file ./ckeplib{self.select_os_command('library_format')} in the function {self} was read!'
-            )
             return CDLL(f'./ckeplib{self.select_os_command('library_format')}')
         except OSError:
             self.logger.error('OS Error!')
@@ -161,11 +157,17 @@ class PyKepLib(Base):
 
 class TheCPower(CKepLib):
     def get_exponentiation(self, value: int):
-        """The method returns the exponentiation of the value with C code"""
+        """
+        The method returns the exponentiation of the value with C code
+        :param value: user int value
+        """
         return self.get_cdll().main(value)
 
     def get_exponentiation_decorator(self, func):
-        """The decorator returns the exponentiation of the value with C code"""
+        """
+        The decorator returns the exponentiation of the value with C code
+        :param func: function for wrapper
+        """
 
         def wrapper(*args):
             return func(self.get_cdll().main(*args))
@@ -177,7 +179,7 @@ class Visual(PyKepLib):
     @staticmethod
     def get_loading_points(text: str, counter: int) -> str:
         """
-        The method takes the counter of value and returns different number of points for different counter values
+        The method takes the counter value and returns a different number of points for different counter values
         :param text: user text
         :param counter: counter of the points
         :return: text with the points
@@ -193,8 +195,8 @@ class Visual(PyKepLib):
 
     def loading_points_decorator(self, replay_amount=4, text='Loading'):
         """
-        The decorator takes the counter of value as a dictionary key and
-        returns different number of points for different counter values
+        The decorator takes the counter value as a dictionary key and
+        returns different numbers of points for different counter values
         """
 
         def decorator(func):
@@ -303,18 +305,23 @@ class Enigma(PyKepLib):
                             password = getpass('')
                             if password != '':
                                 if password == self.decoding(user_password):
-                                    self.logger.info('Authentication has been successfully completed!')
+                                    self.logger.info('Authentication has been successfully completed!\n')
                                     return func(*args)
                                 else:
                                     self.logger.error('Invalid password!')
+                                    raise AttributeError('Invalid password!')
                             else:
                                 self.logger.error('You did not answer!')
+                                raise AttributeError('You did not answer!')
                         else:
                             self.logger.error('Invalid login!')
+                            raise AttributeError('Invalid login!')
                     except NameError:
                         self.logger.error('Cannot access free variable! Restart the application!')
+                        raise AttributeError('Cannot access free variable! Restart the application!')
                 else:
                     self.logger.error('You did not answer!')
+                    raise AttributeError('You did not answer!')
 
             return wrapper
 
@@ -347,7 +354,7 @@ class DataProcessing(PyKepLib):
         return inner_function
 
 
-class TextWorking(PyKepLib):
+class TextWork(PyKepLib):
     # You can use regular expressions from the built-in library re for example:
     # re.sub(r'\bWord_first\b', 'Word_second', str)
     # re.findall(r'\d{4}', str)
@@ -355,11 +362,10 @@ class TextWorking(PyKepLib):
 
     def remove_symbols_return_word(self, word_with_symbol: str, removed_symbol: str, word_number: int) -> str:
         """
-        The method removes from a word or sentence a character accepted in string form and
-        returns the word selected by the third parameter as a number.
+        The method removes everything unnecessary from the word or sentence and returns the desired word or sentence.
         :param word_with_symbol: user word or sentence
         :param removed_symbol: symbol must be removed
-        :param word_number: number of the word position
+        :param word_number: number of the position of desired word or sentence
         :return: word
         """
         try:
@@ -369,8 +375,7 @@ class TextWorking(PyKepLib):
 
     def remove_symbols_from_sentence(self, suggestion: str, removed_symbol: str) -> str:
         """
-        The method removes a character from a word or sentence accepted as a string
-        second parameter and returns this word or sentence.
+        The method removes a character from a sentence accepted in string form and returns this sentence.
         :param suggestion: user word or sentence
         :param removed_symbol: symbol must be removed
         :return: word or sentence

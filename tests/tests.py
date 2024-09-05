@@ -1,10 +1,9 @@
 from unittest import TestCase, main
-from pykeplib import SQLite, TheCPower, Visual, Enigma, DataProcessing, TextWorking, FileHandling
+from pykeplib import SQLite, TheCPower, Visual, Enigma, DataProcessing, TextWork, FileHandling
 
 
-class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, DataProcessing, TextWorking, FileHandling):
+class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, DataProcessing, TextWork, FileHandling):
     def test_get_json_data(self):
-        """The doc text for testing the test_get_doc method"""
         try:
             self.get_json_data('logging')
         except Exception as e:
@@ -15,9 +14,6 @@ class TestPyKepLib(TestCase, TheCPower, Visual, Enigma, DataProcessing, TextWork
 
     def test_select_os_command(self):
         self.assertEqual(self.select_os_command('library_format'), '.so')  # 'dll' for windows
-
-    def test_get_doc(self):
-        self.assertEqual(self.get_doc('test_get_json_data'), 'The doc text for testing the test_get_doc method')
 
     def test_get_cdll(self):
         try:
