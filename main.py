@@ -67,13 +67,13 @@ def remove_symbols_example():
     """Example of the remove_symbols_return_word and remove_symbols_from_sentence functions"""
     text_work.logger.info(
         text_work.remove_symbols_return_word(
-            f"deleted_Example_deleted", '_', 2
+            f"deleted_Example of the method remove symbols return word._deleted",
+            '_', 2
         )
     )
     text_work.logger.info(
         text_work.remove_symbols_from_sentence(
-            f'of_the_method_function remove_symbols_return_word'
-            f' and remove_symbols_from_sentence', '_'
+            f'Example_of_the_method_remove_symbols_from_sentence.', '_'
         ) + '\n'
     )
     text_work.get_method_info('remove_symbols_return_word', 'was called!')

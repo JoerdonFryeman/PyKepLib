@@ -73,7 +73,9 @@ class Base:
         :param key: name of database
         :param text: user text
         """
-        cls.logger.info(f'The method {cls.__dict__[key].__name__} {text}\n{cls.__dict__[key].__doc__}')
+        cls.logger.info(
+            f'The method {cls.__dict__[key].__name__} of the class {cls.__name__} {text}\n{cls.__dict__[key].__doc__}'
+        )
 
 
 class SQLite(Base):
