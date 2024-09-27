@@ -3,7 +3,7 @@
 More info you can find on https://github.com/KeplerCoder
 
 Call the example function on the main function
-``` code
+``` python
 def main():
     get_random_data_example()
 ```
