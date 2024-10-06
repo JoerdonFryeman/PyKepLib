@@ -9,19 +9,6 @@ from logging import config, getLogger
 from sqlite3 import connect, OperationalError
 
 
-class Descriptor:
-    """The descriptor for your project"""
-
-    def __set_name__(self, owner, name):
-        self.name = f"_{name}"
-
-    def __get__(self, instance, owner):
-        return getattr(instance, self.name)
-
-    def __set__(self, instance, value):
-        setattr(instance, self.name, value)
-
-
 class Base:
     @staticmethod
     def get_json_data(name: str) -> dict:
@@ -153,7 +140,10 @@ class PyKepLib(Base):
 
     @property
     def get_coding_or_decoding_dict(self):
-        """The method returns the __get_coding_or_decoding_dict method with property decorator"""
+        """
+        The method returns the __get_coding_or_decoding_dict method with property decorator
+        :return: __get_coding_or_decoding_dict
+        """
         return self.__get_coding_or_decoding_dict
 
 
@@ -204,7 +194,7 @@ class Visual(PyKepLib):
         def decorator(func):
             def wrapper(*args):
                 counter, result = 0, func(*args)
-                for i in range(replay_amount):
+                for _ in range(replay_amount):
                     if counter == 4:
                         counter = 0
                     dictionary = {
@@ -231,7 +221,7 @@ class Visual(PyKepLib):
             counter_first += 1
             counter_second = 0
             sentence = [i for i in text]
-            for i in range(len(sentence)):
+            for _ in range(len(sentence)):
                 counter_second += 1
                 match counter_first:  # return a random float value from 0.1 to 0.3
                     case 1:
@@ -272,7 +262,7 @@ class Enigma(PyKepLib):
         try:
             counter = 0
             transfer_first = []
-            for i in range(len(str(code)) // 3):
+            for _ in range(len(str(code)) // 3):
                 transfer_first.append(''.join(str(code)[counter:3 + counter]))
                 counter += 3
             dict_two = [self.get_coding_or_decoding_dict()[2][i] for i in transfer_first]

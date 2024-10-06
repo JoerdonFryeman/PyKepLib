@@ -113,7 +113,7 @@ def manipulate_with_script_in_file():
 
 def get_welcome_script():
     """Welcome script function"""
-    print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/kepler54\n")
+    print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/KeplerCoder\n")
 
 
 def main():
