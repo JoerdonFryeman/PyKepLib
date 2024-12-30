@@ -1,7 +1,9 @@
 import os
 from time import sleep
-from pykeplib import Enigma, Visual, TextWork, DataProcessing, TheCPower, FileHandling
 
+from pykeplib import Base, Enigma, Visual, TextWork, DataProcessing, TheCPower, FileHandling
+
+base = Base()
 enigma = Enigma()
 visual = Visual()
 text_work = TextWork()
@@ -113,12 +115,15 @@ def manipulate_with_script_in_file():
 
 def get_welcome_script():
     """Welcome script function"""
-    print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/KeplerCoder\n")
+    print("\nYou are welcome at Kepler's personal library\nMore info you can find on https://github.com/JoerdonFryeman\n")
 
 
 def main():
     """Entry point function"""
-    get_welcome_script()
+    try:
+        get_welcome_script()
+    except Exception as e:
+        base.logger.error(f'Произошла непредвиденная ошибка: {e}')
 
 
 if __name__ == '__main__':
